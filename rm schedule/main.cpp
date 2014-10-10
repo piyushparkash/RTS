@@ -17,10 +17,12 @@ int main()
         cout<<"\nperiod of process"<<i+1<<": ";
         cin>>p_time[i];
      }
+     //copy the period of all processes in another variable to get priority
      for(int k=0;k<process;k++)
         {
             prior_temp[k]=p_time[k];
         }
+    //sort the period to set priority
      for(int k=0;k<process;k++)
         {
             for(int j=0;j<process;j++)
@@ -33,6 +35,7 @@ int main()
                         }
                 }
          }
+    //match the priority to original processes
     for(int k=0;k<process;k++)
         {
             for(int j=0;j<process;j++)
@@ -43,18 +46,19 @@ int main()
                           }
                  }
         }
+    //print the table
      cout<<"\nprocess \t ex-time \t period \t priority \t response time \n";
      for(int j=0;j<process;j++)
      {
         cout<<"p"<<j<<" \t\t "<<ex_time[j]<<" \t\t "<<p_time[j]<<" \t\t "<<prior[j]<<" \t\t "<<"\n";
      }
+     // get the utilization bound for condition u<=n*(2^(1/n) -1)
     cout<<"\n";
     for(int a=0;a<process;a++)
     {
         uti=uti+(ex_time[a]/p_time[a]);
     }
-    float pow=1/process;
-    cout<<pow;
+
     n=process*((2^(1/process))-1);
     cout<<uti <<"\t"<< n<<"\n";
     if(uti<=n)
