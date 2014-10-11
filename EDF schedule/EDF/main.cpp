@@ -6,5 +6,5 @@ using namespace std;
 int main()
 {
     Schedule sch;
-    sch.getProcess();
+    sch.collectProcess();
 }

@@ -11,18 +11,6 @@ public:
     int relative_deadline;
     int absolute_deadline;
 
-    bool operator< (Process b)
-    {
-        if (this->absolute_deadline < b.absolute_deadline)
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-    }
-
     Process();
     virtual ~Process();
     void set_period(int);
