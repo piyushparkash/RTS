@@ -12,7 +12,7 @@ Schedule::~Schedule()
     //dtor
 }
 
-int Schedule::run ()
+int Schedule::runEDF ()
 {
     //Collect the list of processes
     Schedule::collectProcess();
@@ -38,9 +38,39 @@ int Schedule::collectProcess()
 
 }
 
+bool Schedule::is_EDFSchedulable()
+{
+    //Calculate the utilization
+    float total_util = 0.0;
+    ProcessList local = Schedule::processes;
+
+    while(!local.empty())
+    {
+        Process temp_process = local.top();
+        local.pop();
+        total_util = (float) temp_process.execution_time/temp_process.period;
+    }
+
+    //Check if it is greater than 1
+    if (total_util < 1)
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
 void Schedule::PrintTasks()
 {
     ProcessList local = Schedule::processes;
+
+    if (local.empty())
+    {
+        cout<<"There is no task to display";
+        return;
+    }
 
     while(!local.empty())
     {

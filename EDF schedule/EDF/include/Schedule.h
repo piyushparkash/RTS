@@ -17,9 +17,10 @@ class Schedule
         ProcessList processes;
 
         void getProcess();
-        int run();
+        int runEDF();
         int collectProcess();
         void PrintTasks();
+        bool is_EDFSchedulable();
     protected:
     private:
 };
