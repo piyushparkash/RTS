@@ -1,4 +1,4 @@
-#include "Schedule.h"
+#include "../include/Schedule.h"
 
 Schedule::Schedule()
 {
@@ -13,10 +13,11 @@ Schedule::~Schedule()
 int Schedule::run ()
 {
     //Collect the list of processes
-    collectProcess();
+    Schedule::collectProcess();
 }
 
 int Schedule::collectProcess()
 {
+    ProcessList localprocess = Schedule::processes;
 
 }

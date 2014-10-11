@@ -1,4 +1,16 @@
 # depslib dependency file v1.0
-1412966653 source:/home/piyush/RTS/EDF schedule/EDF/main.cpp
+1413023844 source:/home/piyush/RTS/EDF schedule/EDF/main.cpp
+	<iostream>
+	"include/Schedule.h"
+
+1413041960 /home/piyush/RTS/EDF schedule/EDF/include/Schedule.h
+	"Process.h"
+	<vector>
+	<queue>
+
+1413041407 /home/piyush/RTS/EDF schedule/EDF/include/Process.h
+
+1413041419 source:/home/piyush/RTS/EDF schedule/EDF/src/Process.cpp
+	"../include/Process.h"
 	<iostream>
 
