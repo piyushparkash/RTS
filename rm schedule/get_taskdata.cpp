@@ -2,10 +2,11 @@
 #include<iostream>
 #include <cmath>
 #include <windows.h>
+using namespace std;
 get_taskdata::get_taskdata(int process_temp)
 {
     process=process_temp;
-    float p_time[process],ex_time[process],n,uti=0,process_f,response[process];
+    vector<float> p_time(process),ex_time(process),response(process);
     process_f=process;
     int prior[process],prior_temp[process];
 //get the C and T of all processes
@@ -65,7 +66,7 @@ get_taskdata::get_taskdata(int process_temp)
 //if utilization condition satisfied print the algo choice
     if(uti<=n)
     {
-        cout<<"the tasks are scheduleable !! utilization="<<uti<<"\n";
+        cout<<"the tasks are scheduleable !! utilization="<<uti<<" n="<<n<<"\n";
 //ask for the scheduling algo
         cout <<"choose 1 algo"<<"\n1. RM scheduling"<<"\n2. EDF scheduling \n";
         cin>>select;
