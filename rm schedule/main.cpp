@@ -5,7 +5,8 @@
 using namespace std;
 int main()
 {
-    long int select,process,a_temp;
+    long int process;
+
 //get total number of processes
     cout <<"How many total processes";
     cin>>process;

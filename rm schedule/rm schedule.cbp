@@ -32,10 +32,11 @@
 			<Add option="-Wall" />
 			<Add option="-fexceptions" />
 		</Compiler>
-		<Unit filename="headers/process.c">
-			<Option compilerVar="CC" />
-		</Unit>
+		<Unit filename="get_taskdata.cpp" />
+		<Unit filename="get_taskdata.h" />
 		<Unit filename="main.cpp" />
+		<Unit filename="process.cpp" />
+		<Unit filename="process.h" />
 		<Extensions>
 			<code_completion />
 			<envvars />
