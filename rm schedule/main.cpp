@@ -8,7 +8,7 @@ int main()
      cout <<"How many total processes";
      cin>>process;
 
-     float p_time[process],ex_time[process],n,uti=0,process_f;
+     float p_time[process],ex_time[process],n,uti=0,process_f,response[process];
      process_f=process;
      int prior[process],prior_temp[process];
 //get the C and T of all processes
@@ -64,9 +64,7 @@ int main()
        uti=uti+(ex_time[a]/p_time[a]);
     }
     process_f=process;
-    cout<<process_f;
     n=process*(pow(2.0,1/process_f)-1);
-    cout<<uti <<"\t"<< n<<"\n";
 //if utilization condition satisfied print the algo choice
     if(uti<=n)
     {
@@ -87,7 +85,20 @@ int main()
         {
     // RM algo logic
             case 1:  cout<<"RM scheduling algo\n";
-
+           /* for(int k=0;k<process;k++)
+            {
+                if(prior_temp[k]==1)
+                {
+                    response[k]=ex_time[k]
+                }
+                else
+                {
+                    for(int y=0;response_temp[y]!=response_temp[y+1];y++)
+                    {
+                        response_temp[y]=response[k-1]+
+                    }
+                }
+            } */
             break;
     //EDF algo logic
             case 2:  cout<<"EDF scheduling algo";
