@@ -1,4 +1,6 @@
 #include<iostream>
+#include<cstdlib>
+#include<windows.h>
 #include "../include/Schedule.h"
 using namespace std;
 
@@ -16,6 +18,30 @@ int Schedule::runEDF ()
 {
     //Collect the list of processes
     Schedule::collectProcess();
+
+    //Now we have the data, check if feasible
+
+    if (Schedule::is_EDFSchedulable())
+    {
+        std::cout<<"Tasks are EDF Schedulable\n";
+    }
+    else
+    {
+        std::cout<<"Tasks are not EDF Schedulable";
+        return false;
+    }
+
+    //Start running tasks
+     ProcessList local = Schedule::processes;
+
+     while (!local.empty())
+     {
+         Process temp = local.top();
+         local.pop();
+         cout<<"Executing "<<temp.processname<<endl;
+         Sleep(1000);
+     }
+
 }
 
 int Schedule::collectProcess()
@@ -26,10 +52,13 @@ int Schedule::collectProcess()
     cin>>no_process;
 
     ProcessList collected_process;
+    char buffer [33];
     for (int count = 0; count < no_process; ++count)
     {
         Process temp_process;
         temp_process.collectdata();
+        itoa(count, buffer, 10);
+        temp_process.set_name("Task " + string(buffer));
         collected_process.push(temp_process);
     } //After this we will have all the process sorted according to deadline
 

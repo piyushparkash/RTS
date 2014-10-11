@@ -25,6 +25,11 @@ void Process::user_period()
     Process::set_period(period);
 }
 
+void Process::set_name(string name)
+{
+    Process::processname = name;
+}
+
 void Process::collectdata()
 {
     cout<<"Execution time of task:";
@@ -33,6 +38,6 @@ void Process::collectdata()
     cout<<"Period Of Task:";
     cin>>Process::period;
 
-    cout<<"Absolute Deadline of Task";
+    cout<<"Absolute Deadline of Task:";
     cin>>Process::absolute_deadline;
 }

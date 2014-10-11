@@ -6,7 +6,7 @@ struct ProcessCompare
     {
         int p1_deadline = p1.absolute_deadline;
         int p2_deadline = p2.absolute_deadline;
-        return p1_deadline < p2_deadline;
+        return p1_deadline > p2_deadline;
     }
 };
 

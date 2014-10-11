@@ -1,10 +1,11 @@
 #ifndef PROCESS_H
 #define PROCESS_H
-
+#include<string>
 
 class Process
 {
 public:
+    std::string processname;
     int execution_time;
     int is_periodic;
     int period;
@@ -16,6 +17,7 @@ public:
     void set_period(int);
     void user_period();
     void collectdata();
+    void set_name(std::string);
 protected:
 private:
 };

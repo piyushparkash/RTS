@@ -6,7 +6,5 @@ using namespace std;
 int main()
 {
     Schedule sch;
-    sch.collectProcess();
-    sch.PrintTasks();
     sch.runEDF();
 }
