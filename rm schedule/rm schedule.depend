@@ -1,4 +1,22 @@
 # depslib dependency file v1.0
-1412956001 source:d:\projecs\c++\algo\rm schedule\main.cpp
+1413038278 source:d:\projecs\c++\algo\rm schedule\main.cpp
 	<iostream>
+	<cmath>
+	<windows.h>
+	"get_taskdata.h"
+
+1412974879 source:d:\projecs\c++\algo\rm schedule\headers\process.c
+
+1413026500 d:\projecs\c++\algo\rm schedule\process.h
+
+1413026811 source:d:\projecs\c++\algo\rm schedule\process.cpp
+	"process.h"
+
+1413038030 d:\projecs\c++\algo\rm schedule\get_taskdata.h
+
+1413038262 source:d:\projecs\c++\algo\rm schedule\get_taskdata.cpp
+	"get_taskdata.h"
+	<iostream>
+	<cmath>
+	<windows.h>
 
