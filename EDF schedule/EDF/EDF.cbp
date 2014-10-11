@@ -32,8 +32,8 @@
 			<Add option="-Wall" />
 			<Add option="-fexceptions" />
 		</Compiler>
-		<Unit filename="ProcessQueue.h" />
 		<Unit filename="include/Process.h" />
+		<Unit filename="include/ProcessQueue.h" />
 		<Unit filename="include/Schedule.h" />
 		<Unit filename="main.cpp" />
 		<Unit filename="src/Process.cpp" />

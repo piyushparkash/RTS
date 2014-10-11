@@ -19,6 +19,7 @@ class Schedule
         void getProcess();
         int run();
         int collectProcess();
+        void PrintTasks();
     protected:
     private:
 };

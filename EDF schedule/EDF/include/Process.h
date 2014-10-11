@@ -15,6 +15,7 @@ public:
     virtual ~Process();
     void set_period(int);
     void user_period();
+    void collectdata();
 protected:
 private:
 };
