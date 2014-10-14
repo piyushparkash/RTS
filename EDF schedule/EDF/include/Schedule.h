@@ -18,9 +18,11 @@ class Schedule
 
         void getProcess();
         int runEDF();
+        int runRM();
         int collectProcess();
         void PrintTasks();
         bool is_EDFSchedulable();
+        bool is_RMSchedulable();
     protected:
     private:
 };
