@@ -3,9 +3,9 @@
 #include<windows.h>
 #include<math.h>
 #include "../include/Schedule.h"
+#include "../include/BasicStruct.h"
 using namespace std;
 
-float total_util = 0.0,n,no_process = 0;
 Schedule::Schedule()
 {
     //ctor
@@ -45,20 +45,28 @@ int Schedule::runEDF ()
      }
 
 }
+
+void Schedule::loadProcessFromFile()
+{
+    //
+}
 int Schedule::runRM ()
 {
+    float total_util;
+    int n;
+
     //Collect the list of processes
     Schedule::collectProcess();
 
     //Now we have the data, check if feasible
-
-    if (Schedule::is_RMSchedulable())
+    RMUtil result = Schedule::is_RMSchedulable();
+    if (result.feasible)
     {
-        std::cout<<"Tasks are RM Schedulable\tu="<<total_util<<" n="<<n<<"\n";
+        std::cout<<"Tasks are RM Schedulable\tu=" << result.total_util << " n=" << result.n << "\n";
     }
     else
     {
-        std::cout<<"Tasks are not RM Schedulable\tu="<<total_util<<" n="<<n<<"\n";
+        std::cout<<"Tasks are not RM Schedulable\tu="<< result.total_util <<" n="<< result.n <<"\n";
         return false;
     }
 
@@ -92,6 +100,7 @@ ProcessListRM Schedule::convertRM(ProcessList processes)
 
 int Schedule::collectProcess()
 {
+    int no_process;
     //Ask first, how many?
     std::cout<<"How many processes are there?";
     cin>>no_process;
@@ -115,7 +124,7 @@ int Schedule::collectProcess()
 bool Schedule::is_EDFSchedulable()
 {
     //Calculate the utilization
-    //float total_util = 0.0;
+    float total_util = 0.0;
     ProcessList local = Schedule::processes;
 
     while(!local.empty())
@@ -135,12 +144,13 @@ bool Schedule::is_EDFSchedulable()
         return false;
     }
 }
-bool Schedule::is_RMSchedulable()
+RMUtil Schedule::is_RMSchedulable()
 {
     //Calculate the utilization
-
+    float n, total_util;
     ProcessList local = Schedule::processes;
 
+    int no_process = local.size();
     while(!local.empty())
     {
         Process temp_process = local.top();
@@ -150,14 +160,22 @@ bool Schedule::is_RMSchedulable()
     n=(float)no_process*(pow(2.0,1/no_process)-1);
 
     //Check if it is greater than n
+
+    RMUtil result;
+    result.n = n;
+    result.total_util = total_util;
+
+
     if (total_util <= n)
     {
-        return true;
+        result.feasible = true;
     }
     else
     {
-        return false;
+        result.feasible = false;
     }
+
+    return result;
 }
 
 void Schedule::PrintTasks()

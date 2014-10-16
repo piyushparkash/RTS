@@ -27,11 +27,12 @@
 	<iostream>
 	"include/Schedule.h"
 
-1413455700 c:\users\theai\rts\edf schedule\edf\include\schedule.h
+1413469284 c:\users\theai\rts\edf schedule\edf\include\schedule.h
 	<vector>
 	<queue>
 	"Process.h"
 	"ProcessQueue.h"
+	"BasicStruct.h"
 
 1413042730 c:\users\theai\rts\edf schedule\edf\include\process.h
 	<string>
@@ -78,4 +79,6 @@
 	<windows.h>
 	<math.h>
 	"../include/Schedule.h"
+
+1413468657 c:\users\theai\rts\edf schedule\edf\include\basicstruct.h
 

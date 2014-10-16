@@ -6,7 +6,7 @@
 
 #include "Process.h"
 #include "ProcessQueue.h"
-
+#include "BasicStruct.h"
 class Schedule
 {
     public:
@@ -16,13 +16,14 @@ class Schedule
         // Variable to store all the process classes
         ProcessList processes;
 
+        void loadProcessFromFile();
         void getProcess();
         int runEDF();
         int runRM();
         int collectProcess();
         void PrintTasks();
         bool is_EDFSchedulable();
-        bool is_RMSchedulable();
+        RMUtil is_RMSchedulable();
         ProcessListRM convertRM(ProcessList);
     protected:
     private:
