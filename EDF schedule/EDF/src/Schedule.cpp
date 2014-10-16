@@ -63,7 +63,7 @@ int Schedule::runRM ()
     }
 
     //Start running tasks
-     ProcessList local = Schedule::processes;
+     ProcessListRM local = Schedule::convertRM(Schedule::processes);
 
      while (!local.empty())
      {
@@ -74,6 +74,21 @@ int Schedule::runRM ()
      }
 
 }
+
+ProcessListRM Schedule::convertRM(ProcessList processes)
+{
+    ProcessListRM converted;
+
+    //Now copy the contents
+    while(!processes.empty())
+    {
+        converted.push(processes.top());
+        processes.pop();
+    }
+
+    return converted;
+}
+
 
 int Schedule::collectProcess()
 {
@@ -87,7 +102,7 @@ int Schedule::collectProcess()
     {
         Process temp_process;
         temp_process.collectdata();
-//        itoa(count, buffer, 10);
+        itoa(count, buffer, 10);
         temp_process.set_name("Task " + string(buffer));
         collected_process.push(temp_process);
     } //After this we will have all the process sorted according to deadline
@@ -133,6 +148,7 @@ bool Schedule::is_RMSchedulable()
         total_util = (float) temp_process.execution_time/temp_process.period;
     }
     n=(float)no_process*(pow(2.0,1/no_process)-1);
+
     //Check if it is greater than n
     if (total_util <= n)
     {

@@ -23,6 +23,7 @@ class Schedule
         void PrintTasks();
         bool is_EDFSchedulable();
         bool is_RMSchedulable();
+        ProcessListRM convertRM(ProcessList);
     protected:
     private:
 };

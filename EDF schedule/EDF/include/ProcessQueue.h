@@ -10,5 +10,15 @@ struct ProcessCompare
     }
 };
 
-typedef std::priority_queue<Process, std::vector<Process>, ProcessCompare> ProcessList;
+struct RMCompare
+{
+    bool operator()(const Process &p1, const Process &p2) const
+    {
+        int p1_executiontime= p1.execution_time;
+        int p2_executiontime = p2.execution_time;
+        return p1_executiontime > p2_executiontime;
+    }
+};
 
+typedef std::priority_queue<Process, std::vector<Process>, ProcessCompare> ProcessList;
+typedef std::priority_queue<Process, std::vector<Process>, RMCompare> ProcessListRM;
