@@ -1,3 +1,15 @@
+/*
+ *       \file       Schedule.cc
+ *
+ *       \brief      Class definition for LDF Scheduling and RM Scheduling
+ *
+ *       \compiler   g++\n
+ *
+ *       \author     Piyush Prakash, achyutapiyush@gmail.com
+ *       \license    GNU General Public License Version 2
+ *       \copyright  Copyright (c) 2014, B&B Developers
+ *                   jashnmalhi@yahoo.in
+ */
 #include<iostream>
 #include<cstdlib>
 #include<windows.h>
@@ -15,7 +27,12 @@ Schedule::~Schedule()
 {
     //dtor
 }
-
+/*
+ *      \class  Schedule
+ *      \fn     Schedule :: runEDF()
+ *      \brief  User given data of Processes is collected then evaluated if they are schedulable or not.
+ *              The schedulable processes are executed one by one in the scheduled order.
+ */
 int Schedule::runEDF ()
 {
     //Collect the list of processes
@@ -33,7 +50,10 @@ int Schedule::runEDF ()
         return false;
     }
 
-    //Start running tasks
+/*
+ *      \class  Schedule
+ *      \brief
+ */
      ProcessList local = Schedule::processes;
 
      while (!local.empty())
@@ -75,7 +95,7 @@ int Schedule::runRM ()
 
      while (!local.empty())
      {
-         Process temp = local.top();
+         Process temp =et  local.top();
          local.pop();
          cout<<"\nExecuting "<<temp.processname<<" expected time "<<temp.execution_time<<"sec......"<<endl;
          Sleep(temp.execution_time*1000);
