@@ -4,6 +4,8 @@
 #include<math.h>
 #include "../include/Schedule.h"
 #include "../include/BasicStruct.h"
+#include <fstream>
+#include <sstream>
 using namespace std;
 
 Schedule::Schedule()
@@ -34,22 +36,69 @@ int Schedule::runEDF ()
     }
 
     //Start running tasks
-     ProcessList local = Schedule::processes;
+    ProcessList local = Schedule::processes;
 
-     while (!local.empty())
-     {
-         Process temp = local.top();
-         local.pop();
-         cout<<"Executing "<<temp.processname<<endl;
-         Sleep(1000);
-     }
+    while (!local.empty())
+    {
+        Process temp = local.top();
+        local.pop();
+        cout<<"Executing "<<temp.processname<<endl;
+        Sleep(1000);
+    }
 
 }
 
-void Schedule::loadProcessFromFile()
+void Schedule::loadProcessFromFile(string filename)
 {
-    //
+    fstream file;
+    string line;
+    file.open(filename.c_str());
+
+    if (!file.is_open())
+    {
+        cout<<"Could not find file. Please check";
+        return;
+    }
+
+    string var;
+    vector<string> tokens;
+    Process temp;
+
+
+    while(!file.eof())
+    {
+        //Right Now we have 3 variables that needs to be fetched
+        std::getline(file,line);
+        istringstream streamline(line);
+
+        //get the three written numbers in the file
+        while (streamline >> var)
+        {
+            tokens.push_back(var);
+            var.clear();
+        }
+
+        //Insert value in the Process;
+        temp.execution_time = atoi(tokens[0].c_str());
+        temp.period = atoi(tokens[1].c_str());
+        temp.absolute_deadline = atoi(tokens[2].c_str());
+
+        Schedule::processes.push(temp);
+
+
+        //Reset the vector and the string
+        tokens.erase(tokens.begin(), tokens.end());
+        var.clear();
+    }
+
+
+
+
+
+
+
 }
+
 int Schedule::runRM ()
 {
     float total_util;
@@ -71,15 +120,15 @@ int Schedule::runRM ()
     }
 
     //Start running tasks
-     ProcessListRM local = Schedule::convertRM(Schedule::processes);
+    ProcessListRM local = Schedule::convertRM(Schedule::processes);
 
-     while (!local.empty())
-     {
-         Process temp = local.top();
-         local.pop();
-         cout<<"\nExecuting "<<temp.processname<<" expected time "<<temp.execution_time<<"sec......"<<endl;
-         Sleep(temp.execution_time*1000);
-     }
+    while (!local.empty())
+    {
+        Process temp = local.top();
+        local.pop();
+        cout<<"\nExecuting "<<temp.processname<<" expected time "<<temp.execution_time<<"sec......"<<endl;
+        Sleep(temp.execution_time*1000);
+    }
 
 }
 
@@ -157,7 +206,7 @@ RMUtil Schedule::is_RMSchedulable()
         local.pop();
         total_util = (float) temp_process.execution_time/temp_process.period;
     }
-    n=(float)no_process*(pow(2.0,1/no_process)-1);
+    n = (float) no_process * (pow(2.0, 1 / no_process) - 1);
 
     //Check if it is greater than n
 
