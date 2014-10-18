@@ -56,16 +56,17 @@
 	<iostream>
 	"include/Schedule.h"
 
-1413326950 c:\users\jashn\desktop\rts\edf schedule\edf\include\schedule.h
+1413562694 c:\users\jashn\desktop\rts\edf schedule\edf\include\schedule.h
 	<vector>
 	<queue>
 	"Process.h"
 	"ProcessQueue.h"
+	"BasicStruct.h"
 
 1413064185 c:\users\jashn\desktop\rts\edf schedule\edf\include\process.h
 	<string>
 
-1413324772 c:\users\jashn\desktop\rts\edf schedule\edf\include\processqueue.h
+1413562693 c:\users\jashn\desktop\rts\edf schedule\edf\include\processqueue.h
 	<vector>
 	<queue>
 
@@ -81,4 +82,6 @@
 	"../include/Schedule.h"
 
 1413468657 c:\users\theai\rts\edf schedule\edf\include\basicstruct.h
+
+1413562693 c:\users\jashn\desktop\rts\edf schedule\edf\include\basicstruct.h
 

@@ -29,16 +29,13 @@ Schedule::~Schedule()
 }
 /*
  *      \class  Schedule
- *      \fn     Schedule :: runEDF()
- *      \brief  User given data of Processes is collected then evaluated if they are schedulable or not.
- *              The schedulable processes are executed one by one in the scheduled order.
+ *      \fnctn  Schedule :: runEDF()
+ *      \brief  User given data of Processes for EDF scheduling is collected then evaluated if they are schedulable or not.
+ *              The schedulable processes are executed one by one.
  */
 int Schedule::runEDF ()
 {
-    //Collect the list of processes
     Schedule::collectProcess();
-
-    //Now we have the data, check if feasible
 
     if (Schedule::is_EDFSchedulable())
     {
@@ -52,7 +49,12 @@ int Schedule::runEDF ()
 
 /*
  *      \class  Schedule
- *      \brief
+ *      \brief  All the processes for EDF scheduling are stored in a local variable named "local".
+                It will prioritize the processes according to their deadline time.
+ *              The "local.top()" will return the topmost process from the priority queue "local".
+ *              This topmost process is stored in "temp" variable of "process" type.
+ *              That process will be removed from the queue so as to get next topmost process.
+ *              Now the process is executed after deletion from queue by calling "temp.processname".
  */
      ProcessList local = Schedule::processes;
 
@@ -65,20 +67,30 @@ int Schedule::runEDF ()
      }
 
 }
-
+/*
+ *      \class  Schedule
+ *      \fnctn  Schedule :: loadProcessFromFile()
+ *      \brief
+ */
 void Schedule::loadProcessFromFile()
 {
     //
 }
+/*
+ *      \class  Schedule
+ *      \fnctn  Schedule :: rumRM()
+ *      \brief  User will be asked to type the process data for RM scheduling through "collectprocess" function then,
+ *              If the user given processes are schedulable i.e. if they satisfy the equation u<=n
+ *              Then the processes will be scheduled and executed in a arranged sequence.
+ */
 int Schedule::runRM ()
 {
     float total_util;
     int n;
 
-    //Collect the list of processes
     Schedule::collectProcess();
 
-    //Now we have the data, check if feasible
+
     RMUtil result = Schedule::is_RMSchedulable();
     if (result.feasible)
     {
@@ -90,18 +102,36 @@ int Schedule::runRM ()
         return false;
     }
 
-    //Start running tasks
+/*
+ *      \class  Schedule
+ *      \fnctn  Schedule::convertRM(Schedule::processes);
+ *      \brief  All the processes for RM scheduling are stored in a local variable named "local".
+ *              The "local.top()" will return the topmost process from the priority queue "local".
+ *              This topmost process is stored in "temp" variable of "process" type.
+ *              That process will be removed from the queue so as to get next topmost process.
+ *              Now the process is executed after deletion from queue by calling "temp.processname".
+ */
      ProcessListRM local = Schedule::convertRM(Schedule::processes);
 
      while (!local.empty())
      {
-         Process temp =et  local.top();
+         Process temp = local.top();
          local.pop();
          cout<<"\nExecuting "<<temp.processname<<" expected time "<<temp.execution_time<<"sec......"<<endl;
          Sleep(temp.execution_time*1000);
      }
 
 }
+/*
+ *      \class  Schedule
+ *      \fnctn  ProcessListRM Schedule::convertRM(ProcessList processes)
+ *      \brief  The processes are stored in ProcessListRM so as to prioritize them
+ *              according to their execution time.untill the process variable is not empty
+ *              the loop will push the topmost process into the converted variable and then
+ *              pop out that process from "process" variable."converted" variable will store
+ *              the prioritized processes.Once the processes variable is empty
+ *              the function will return converted.
+ */
 
 ProcessListRM Schedule::convertRM(ProcessList processes)
 {
@@ -117,7 +147,16 @@ ProcessListRM Schedule::convertRM(ProcessList processes)
     return converted;
 }
 
-
+/*
+ *      \class  Schedule
+ *      \fnctn  Schedule::collectProcess()
+ *      \brief  A local variable named "no_process" will store the total no of process(given by user)
+ *              The data related to the processes(execution time, period, deadline) is then collected.
+ *              "temp_process.collectdata()" will take the user input of process data in a loop untill
+ *              the count < no_process.
+ *              Set_name is used to give a unique name to each process (eg: Task1 , Task2)
+ *              Then the data is pushed to a variable "collected_process" of processlist type.
+ */
 int Schedule::collectProcess()
 {
     int no_process;
@@ -141,6 +180,15 @@ int Schedule::collectProcess()
 
 }
 
+/*
+ *      \class  Schedule
+ *      \fnctn  Schedule::is_EDFSchedulable()
+ *      \brief  The while loop will calculate the total utilization bound factor so as to check if the given data
+ *              is schedulable according to EDF schedule or not, total_util variable holds that value.
+ *              total_util is calculated as summation of (execution time/period) of all processes.
+ *              if total_util holds a value which is smaller than 1 then processes are schedulable else they are not.
+ *
+ */
 bool Schedule::is_EDFSchedulable()
 {
     //Calculate the utilization
@@ -164,6 +212,17 @@ bool Schedule::is_EDFSchedulable()
         return false;
     }
 }
+
+/*
+ *      \class  Schedule
+ *      \fnctn  Schedule::is_EDFSchedulable()
+ *      \brief  The while loop will calculate the total utilization bound factor so as to check if the given data
+ *              is schedulable according to RM schedule or not, total_util variable holds that value.
+ *              total_util is calculated as summation of (execution time/period) of all processes.
+ *              n variable stores the number of processes to be scheduled.
+ *              if total_util holds a value which is smaller than or equals to n then processes are schedulable else they are not.
+ *
+ */
 RMUtil Schedule::is_RMSchedulable()
 {
     //Calculate the utilization
@@ -197,6 +256,14 @@ RMUtil Schedule::is_RMSchedulable()
 
     return result;
 }
+
+/*
+ *      \class  Schedule
+ *      \fnctn  Schedule::PrintTasks()
+ *      \brief  A variable "local" will hold all the processes and their data, if it is empty then
+ *              message"There is no task to display" will be displayed else the process data will be displayed
+ *              through the "temp" variable.
+ */
 
 void Schedule::PrintTasks()
 {
