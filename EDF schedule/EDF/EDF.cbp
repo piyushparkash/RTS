@@ -32,6 +32,7 @@
 			<Add option="-Wall" />
 			<Add option="-fexceptions" />
 		</Compiler>
+		<Unit filename="include/BasicStruct.h" />
 		<Unit filename="include/Process.h" />
 		<Unit filename="include/ProcessQueue.h" />
 		<Unit filename="include/Schedule.h" />
@@ -41,6 +42,7 @@
 		<Extensions>
 			<code_completion />
 			<debugger />
+			<envvars />
 		</Extensions>
 	</Project>
 </CodeBlocks_project_file>

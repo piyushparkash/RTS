@@ -19,14 +19,20 @@ using namespace std;
 
 int main()
 {
+    Schedule sch;
+    sch.loadProcessFromFile("Sample.txt");
     int choice;
     cout<<"choose the algo to proceed \n 1.) EDF scheduling algo \n 2.) RM scheduling algo\n";
     cin>>choice;
+
 /*
  *      \file   main.cc
  *      \brief  user is asked to type a number(either 1 or 2) to make a choice for EDF or RM scheduling.
  */
     if(choice<1 || choice>2)
+
+    if(choice < 1 || choice > 2)
+
     {
        cout<<"invalid digit !! try again\n";
        cout<<"choose the algo to proceed \n 1.) EDF scheduling algo \n 2.) RM scheduling algo\n";
@@ -38,6 +44,7 @@ int main()
  *      \brief  If user pressed 1 EDF scheduling will be done to the processes
  *              If user pressed 2 RM scheduling will be done to the processes.
  */
+    }
     switch(choice)
     {
        case(1):

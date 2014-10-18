@@ -16,7 +16,7 @@ class Schedule
         // Variable to store all the process classes
         ProcessList processes;
 
-        void loadProcessFromFile();
+        void loadProcessFromFile(std::string);
         void getProcess();
         int runEDF();
         int runRM();
