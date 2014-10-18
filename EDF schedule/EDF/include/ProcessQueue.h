@@ -14,9 +14,9 @@ struct RMCompare
 {
     bool operator()(const Process &p1, const Process &p2) const
     {
-        int p1_executiontime= p1.execution_time;
-        int p2_executiontime = p2.execution_time;
-        return p1_executiontime > p2_executiontime;
+        int p1_period = p1.period;
+        int p2_period = p2.period;
+        return p1_period > p2_period;
     }
 };
 
