@@ -202,7 +202,7 @@ int Schedule::collectProcess()
     {
         Process temp_process;
         temp_process.collectdata();
-        itoa(count, buffer, 10);
+//        itoa(count, buffer, 10);
         temp_process.set_name("Task " + string(buffer));
         collected_process.push(temp_process);
     } //After this we will have all the process sorted according to deadline

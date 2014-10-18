@@ -70,9 +70,11 @@ void Process::collectdata()
 {
     cout<<"Execution time of task:";
     cin>>Process::execution_time;
+    Process::executed=Process::execution_time;
 
     cout<<"Period Of Task:";
     cin>>Process::period;
+    Process::period_completed=Process::period;
 
     cout<<"Absolute Deadline of Task:";
     cin>>Process::absolute_deadline;

@@ -7,8 +7,10 @@ class Process
 public:
     std::string processname;
     int execution_time;
+    int executed;
     int is_periodic;
     int period;
+    int period_completed;
     int relative_deadline;
     int absolute_deadline;
 
