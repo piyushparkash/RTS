@@ -51,15 +51,7 @@ int Schedule::runEDF ()
         return false;
     }
 
-/*
- *      \class  Schedule
- *      \brief  All the processes for EDF scheduling are stored in a local variable named "local".
-                It will prioritize the processes according to their deadline time.
- *              The "local.top()" will return the topmost process from the priority queue "local".
- *              This topmost process is stored in "temp" variable of "process" type.
- *              That process will be removed from the queue so as to get next topmost process.
- *              Now the process is executed after deletion from queue by calling "temp.processname".
- */
+
      ProcessList local = Schedule::processes;
 
     while (!local.empty())
@@ -76,8 +68,6 @@ int Schedule::runEDF ()
  *      \fnctn  Schedule :: loadProcessFromFile()
  *      \brief
  */
-void Schedule::loadProcessFromFile()
-
 void Schedule::loadProcessFromFile(string filename)
 {
     fstream file;
@@ -121,6 +111,8 @@ void Schedule::loadProcessFromFile(string filename)
         var.clear();
     }
 }
+
+
 /*
  *      \class  Schedule
  *      \fnctn  Schedule :: rumRM()
@@ -148,25 +140,6 @@ int Schedule::runRM ()
         return false;
     }
 
-/*
- *      \class  Schedule
- *      \fnctn  Schedule::convertRM(Schedule::processes);
- *      \brief  All the processes for RM scheduling are stored in a local variable named "local".
- *              The "local.top()" will return the topmost process from the priority queue "local".
- *              This topmost process is stored in "temp" variable of "process" type.
- *              That process will be removed from the queue so as to get next topmost process.
- *              Now the process is executed after deletion from queue by calling "temp.processname".
- */
-     ProcessListRM local = Schedule::convertRM(Schedule::processes);
-
-     while (!local.empty())
-     {
-         Process temp = local.top();
-         local.pop();
-         cout<<"\nExecuting "<<temp.processname<<" expected time "<<temp.execution_time<<"sec......"<<endl;
-         Sleep(temp.execution_time*1000);
-     }
-
     //Start running tasks
     ProcessListRM local = Schedule::convertRM(Schedule::processes);
 
@@ -179,6 +152,8 @@ int Schedule::runRM ()
     }
 
 }
+
+
 /*
  *      \class  Schedule
  *      \fnctn  ProcessListRM Schedule::convertRM(ProcessList processes)
@@ -272,7 +247,7 @@ bool Schedule::is_EDFSchedulable()
 
 /*
  *      \class  Schedule
- *      \fnctn  Schedule::is_EDFSchedulable()
+ *      \fnctn  Schedule::is_RMSchedulable()
  *      \brief  The while loop will calculate the total utilization bound factor so as to check if the given data
  *              is schedulable according to RM schedule or not, total_util variable holds that value.
  *              total_util is calculated as summation of (execution time/period) of all processes.
