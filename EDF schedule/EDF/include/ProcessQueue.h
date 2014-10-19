@@ -20,5 +20,16 @@ struct RMCompare
     }
 };
 
+struct RMarrival
+{
+    bool operator()(const Process &p1, const Process &p2) const
+    {
+        int p1_arrival_time = p1.arrival_time;
+        int p2_arrival_time = p2.arrival_time;
+        return p1_arrival_time > p2_arrival_time;
+    }
+};
+
 typedef std::priority_queue<Process, std::vector<Process>, ProcessCompare> ProcessList;
 typedef std::priority_queue<Process, std::vector<Process>, RMCompare> ProcessListRM;
+typedef std::priority_queue<Process, std::vector<Process>, RMarrival> ProcessListarrive;

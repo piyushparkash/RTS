@@ -59,30 +59,34 @@
 	<iostream>
 	"include/Schedule.h"
 
-1413643199 c:\users\jashn\desktop\rts\edf schedule\edf\include\schedule.h
+1413706598 c:\users\jashn\desktop\rts\edf schedule\edf\include\schedule.h
 	<vector>
 	<queue>
 	"Process.h"
 	"ProcessQueue.h"
 	"BasicStruct.h"
 
-1413064185 c:\users\jashn\desktop\rts\edf schedule\edf\include\process.h
+1413706251 c:\users\jashn\desktop\rts\edf schedule\edf\include\process.h
 	<string>
 
-1413562693 c:\users\jashn\desktop\rts\edf schedule\edf\include\processqueue.h
+1413707312 c:\users\jashn\desktop\rts\edf schedule\edf\include\processqueue.h
 	<vector>
 	<queue>
 
-1413637718 source:c:\users\jashn\desktop\rts\edf schedule\edf\src\process.cpp
+1413656815 source:c:\users\jashn\desktop\rts\edf schedule\edf\src\process.cpp
 	"../include/Process.h"
 	<iostream>
 
-1413329099 source:c:\users\jashn\desktop\rts\edf schedule\edf\src\schedule.cpp
+1413715108 source:c:\users\jashn\desktop\rts\edf schedule\edf\src\schedule.cpp
 	<iostream>
 	<cstdlib>
 	<windows.h>
 	<math.h>
 	"../include/Schedule.h"
+	"../include/BasicStruct.h"
+	<fstream>
+	<sstream>
+	<vector>
 
 1413468657 c:\users\theai\rts\edf schedule\edf\include\basicstruct.h
 

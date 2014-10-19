@@ -18,6 +18,7 @@
 #include "../include/BasicStruct.h"
 #include <fstream>
 #include <sstream>
+#include<vector>
 using namespace std;
 
 Schedule::Schedule()
@@ -141,7 +142,7 @@ int Schedule::runRM ()
     }
 
     //Start running tasks
-    ProcessListRM local = Schedule::convertRM(Schedule::processes);
+   /* ProcessListRM local = Schedule::convertRM(Schedule::processes);
 
     while (!local.empty())
     {
@@ -150,15 +151,82 @@ int Schedule::runRM ()
         cout<<"\nExecuting "<<temp.processname<<" expected time "<<temp.execution_time<<"sec......"<<endl;
         Sleep(temp.execution_time*1000);
     }
+*/
+    ProcessListRM local = Schedule::convertRM(Schedule::processes);
+    vector <Process> temp;
+    vector <Process> arrived;
+    vector <Process> tempry;
 
+    int i=0,k=0,total_time=0,total=0;
+
+    while (!local.empty())
+    {
+        temp.push_back(local.top());
+        local.pop();
+        total++;
+       // cout<<"\nExecuting "<<temp[i].processname<<" expected time "<<temp[i].execution_time<<"sec......"<<endl;
+        //Sleep(temp[i].execution_time*1000);
+    }
+
+     for(int j=0;j<total;j++)
+    {
+        temp[j].priority=j;
+        total_time=total_time+temp[j].execution_time;
+    }
+
+    ProcessListarrive local_arrive = Schedule::compare(Schedule::processes);
+
+    while (!local_arrive.empty())
+    {
+        arrived.push_back(local_arrive.top());
+        local_arrive.pop();
+    }
+
+
+    while(total_time!=0)
+    {
+        if(arrived[i].execution_time==0)
+        {
+            arrived.erase(arrived.begin()+i);
+            i++;
+        }
+        else if(arrived[i].execution_time>=1 & arrived[i].arrival_time == arrived[i+1].arrival_time)
+        {
+            if(arrived[i].priority < arrived[i+1].priority)
+            {
+                cout<<"\n Now Executing "<<arrived[i].processname<<i<<" time-remaining "<<arrived[i].execution_time<<"sec......"<<endl;
+                Sleep(arrived[i].execution_time*1000);
+                arrived[i].execution_time=arrived[i].execution_time-1;
+                arrived[i].arrival_time=arrived[i].arrival_time+1;
+                total_time-1;
+            }
+             else
+            {
+                cout<<"\n"<<arrived[i].processname<<" has been preempted by task "<<arrived[i+1].processname<<" time-remaining "<<arrived[i+1].execution_time<<"sec......"<<endl;
+                tempry[i]=arrived[i];
+                arrived[i]=arrived[i+1];
+                arrived[i+1]=tempry[i];
+                Sleep(arrived[i].execution_time*1000);
+                arrived[i].execution_time=arrived[i].execution_time-1;
+                arrived[i].arrival_time=arrived[i].arrival_time+1;
+                total_time-1;
+            }
+        }
+        else
+        {
+                cout<<"\n"<<arrived[i].processname<<" has been started "<<" Executing "<<arrived[i].processname<<" time-remaining "<<arrived[i].execution_time<<"sec......"<<endl;
+                Sleep(arrived[i].execution_time*1000);
+                arrived[i].execution_time=arrived[i].execution_time-1;
+                arrived[i].arrival_time=arrived[i].arrival_time+1;
+                total_time-1;
+        }
+    }
 }
-
-
 /*
  *      \class  Schedule
  *      \fnctn  ProcessListRM Schedule::convertRM(ProcessList processes)
  *      \brief  The processes are stored in ProcessListRM so as to prioritize them
- *              according to their execution time.untill the process variable is not empty
+ *              according to their period time.untill the process variable is not empty
  *              the loop will push the topmost process into the converted variable and then
  *              pop out that process from "process" variable."converted" variable will store
  *              the prioritized processes.Once the processes variable is empty
@@ -178,6 +246,21 @@ ProcessListRM Schedule::convertRM(ProcessList processes)
 
     return converted;
 }
+
+ProcessListarrive Schedule::compare(ProcessList processes)
+{
+    ProcessListarrive arrival;
+
+    //Now copy the contents
+    while(!processes.empty())
+    {
+        arrival.push(processes.top());
+        processes.pop();
+    }
+
+    return arrival;
+}
+
 
 /*
  *      \class  Schedule
@@ -261,14 +344,14 @@ RMUtil Schedule::is_RMSchedulable()
     float n, total_util;
     ProcessList local = Schedule::processes;
 
-    int no_process = local.size();
+    float no_process = local.size();
     while(!local.empty())
     {
         Process temp_process = local.top();
         local.pop();
         total_util = (float) temp_process.execution_time/temp_process.period;
     }
-    n = (float) no_process * (pow(2.0, 1 / no_process) - 1);
+    n = no_process*(pow(2,1/no_process) - 1);
 
     //Check if it is greater than n
 
@@ -313,4 +396,5 @@ void Schedule::PrintTasks()
         local.pop();
         cout<<temp.absolute_deadline<<endl;
     }
+
 }

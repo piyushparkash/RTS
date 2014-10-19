@@ -35,6 +35,8 @@ class Schedule
         bool is_EDFSchedulable();
         RMUtil is_RMSchedulable();
         ProcessListRM convertRM(ProcessList);
+        ProcessListarrive compare(ProcessList);
+
     protected:
     private:
 };

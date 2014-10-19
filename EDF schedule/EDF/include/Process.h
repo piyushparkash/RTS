@@ -10,7 +10,9 @@ public:
     int executed;
     int is_periodic;
     int period;
+    int priority;
     int period_completed;
+    int arrival_time;
     int relative_deadline;
     int absolute_deadline;
 

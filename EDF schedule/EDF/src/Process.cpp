@@ -76,6 +76,9 @@ void Process::collectdata()
     cin>>Process::period;
     Process::period_completed=Process::period;
 
+    cout<<"Arrival time Of Task:";
+    cin>>Process::arrival_time;
+
     cout<<"Absolute Deadline of Task:";
     cin>>Process::absolute_deadline;
 }
