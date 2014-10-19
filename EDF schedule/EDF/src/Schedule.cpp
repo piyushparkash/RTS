@@ -155,7 +155,7 @@ int Schedule::runRM ()
     ProcessListRM local = Schedule::convertRM(Schedule::processes);
     vector <Process> temp;
     vector <Process> arrived;
-    vector <Process> tempry;
+    vector <Process> tempry(2);
 
     int i=0,k=0,total_time=0,total=0;
 
@@ -195,30 +195,29 @@ int Schedule::runRM ()
             if(arrived[i].priority < arrived[i+1].priority)
             {
                 cout<<"\n Now Executing "<<arrived[i].processname<<i<<" time-remaining "<<arrived[i].execution_time<<"sec......"<<endl;
-                Sleep(arrived[i].execution_time*1000);
+                Sleep(1000);
                 arrived[i].execution_time=arrived[i].execution_time-1;
                 arrived[i].arrival_time=arrived[i].arrival_time+1;
-                total_time-1;
             }
              else
             {
                 cout<<"\n"<<arrived[i].processname<<" has been preempted by task "<<arrived[i+1].processname<<" time-remaining "<<arrived[i+1].execution_time<<"sec......"<<endl;
-                tempry[i]=arrived[i];
+                tempry[0]=arrived[i];
                 arrived[i]=arrived[i+1];
-                arrived[i+1]=tempry[i];
-                Sleep(arrived[i].execution_time*1000);
+                arrived[i+1]=tempry[0];
+                Sleep(1000);
                 arrived[i].execution_time=arrived[i].execution_time-1;
                 arrived[i].arrival_time=arrived[i].arrival_time+1;
-                total_time-1;
             }
+            total_time=total_time-1;
         }
         else
         {
                 cout<<"\n"<<arrived[i].processname<<" has been started "<<" Executing "<<arrived[i].processname<<" time-remaining "<<arrived[i].execution_time<<"sec......"<<endl;
-                Sleep(arrived[i].execution_time*1000);
+                Sleep(1000);
                 arrived[i].execution_time=arrived[i].execution_time-1;
                 arrived[i].arrival_time=arrived[i].arrival_time+1;
-                total_time-1;
+                total_time=total_time-1;
         }
     }
 }
