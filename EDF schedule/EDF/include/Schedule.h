@@ -33,6 +33,9 @@ class Schedule
         int collectProcess();
         void PrintTasks();
         bool is_EDFSchedulable();
+        int set_priority(std::vector<Process>,int);
+        std::vector<Process> copyto_vector(ProcessListarrive);
+        void RM_preemptive(int,std::vector<Process>,int);
         RMUtil is_RMSchedulable();
         ProcessListRM convertRM(ProcessList);
         ProcessListarrive compare(ProcessList);

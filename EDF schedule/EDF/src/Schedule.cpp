@@ -124,8 +124,11 @@ void Schedule::loadProcessFromFile(string filename)
 
 int Schedule::runRM ()
 {
+    vector <Process> temp;
+
+    int total=0;
     float total_util;
-    int n;
+
 
     Schedule::collectProcess();
 
@@ -134,6 +137,28 @@ int Schedule::runRM ()
     if (result.feasible)
     {
         std::cout<<"Tasks are RM Schedulable\tu=" << result.total_util << " n=" << result.n << "\n";
+         ProcessListRM local = Schedule::convertRM(Schedule::processes);
+
+        while (!local.empty())
+        {
+            temp.push_back(local.top());
+            local.pop();
+            total++;
+           // cout<<"\nExecuting "<<temp[i].processname<<" expected time "<<temp[i].execution_time<<"sec......"<<endl;
+            //Sleep(temp[i].execution_time*1000);
+        }
+
+        //function to set value to priority variable according to the asscending order of their period.
+        int total_time = Schedule::set_priority(temp ,total);
+
+        //function to compare the variables according to their arrival time
+        ProcessListarrive local_arrive = Schedule::compare(Schedule::processes);
+
+        //function to copy vector to new vector
+        vector<Process> arrived = Schedule::copyto_vector(local_arrive);
+
+        //function to find schedule for preempted tasks
+         Schedule::RM_preemptive(total_time,arrived,total);
     }
     else
     {
@@ -152,74 +177,7 @@ int Schedule::runRM ()
         Sleep(temp.execution_time*1000);
     }
 */
-    ProcessListRM local = Schedule::convertRM(Schedule::processes);
-    vector <Process> temp;
-    vector <Process> arrived;
-    vector <Process> tempry(2);
 
-    int i=0,k=0,total_time=0,total=0;
-
-    while (!local.empty())
-    {
-        temp.push_back(local.top());
-        local.pop();
-        total++;
-       // cout<<"\nExecuting "<<temp[i].processname<<" expected time "<<temp[i].execution_time<<"sec......"<<endl;
-        //Sleep(temp[i].execution_time*1000);
-    }
-
-     for(int j=0;j<total;j++)
-    {
-        temp[j].priority=j;
-        total_time=total_time+temp[j].execution_time;
-    }
-
-    ProcessListarrive local_arrive = Schedule::compare(Schedule::processes);
-
-    while (!local_arrive.empty())
-    {
-        arrived.push_back(local_arrive.top());
-        local_arrive.pop();
-    }
-
-
-    while(total_time!=0)
-    {
-        if(arrived[i].execution_time==0)
-        {
-            arrived.erase(arrived.begin()+i);
-            i++;
-        }
-        else if(arrived[i].execution_time>=1 & arrived[i].arrival_time == arrived[i+1].arrival_time)
-        {
-            if(arrived[i].priority < arrived[i+1].priority)
-            {
-                cout<<"\n Now Executing "<<arrived[i].processname<<i<<" time-remaining "<<arrived[i].execution_time<<"sec......"<<endl;
-                Sleep(1000);
-                arrived[i].execution_time=arrived[i].execution_time-1;
-                arrived[i].arrival_time=arrived[i].arrival_time+1;
-            }
-             else
-            {
-                cout<<"\n"<<arrived[i].processname<<" has been preempted by task "<<arrived[i+1].processname<<" time-remaining "<<arrived[i+1].execution_time<<"sec......"<<endl;
-                tempry[0]=arrived[i];
-                arrived[i]=arrived[i+1];
-                arrived[i+1]=tempry[0];
-                Sleep(1000);
-                arrived[i].execution_time=arrived[i].execution_time-1;
-                arrived[i].arrival_time=arrived[i].arrival_time+1;
-            }
-            total_time=total_time-1;
-        }
-        else
-        {
-                cout<<"\n"<<arrived[i].processname<<" has been started "<<" Executing "<<arrived[i].processname<<" time-remaining "<<arrived[i].execution_time<<"sec......"<<endl;
-                Sleep(1000);
-                arrived[i].execution_time=arrived[i].execution_time-1;
-                arrived[i].arrival_time=arrived[i].arrival_time+1;
-                total_time=total_time-1;
-        }
-    }
 }
 /*
  *      \class  Schedule
@@ -246,6 +204,17 @@ ProcessListRM Schedule::convertRM(ProcessList processes)
     return converted;
 }
 
+int Schedule::set_priority( vector <Process> temp,int total)
+{
+    int total_time_calculate=0;
+    for(int j=0;j<total;j++)
+    {
+        temp[j].priority=j;
+        total_time_calculate=total_time_calculate+temp[j].execution_time;
+    }
+    return total_time_calculate;
+}
+
 ProcessListarrive Schedule::compare(ProcessList processes)
 {
     ProcessListarrive arrival;
@@ -260,6 +229,63 @@ ProcessListarrive Schedule::compare(ProcessList processes)
     return arrival;
 }
 
+vector<Process> Schedule::copyto_vector(ProcessListarrive local_arrive)
+{
+    vector <Process> arrived;
+    while (!local_arrive.empty())
+    {
+        arrived.push_back(local_arrive.top());
+        local_arrive.pop();
+    }
+    return arrived;
+}
+
+void Schedule::RM_preemptive(int total_time,vector<Process> arrived,int total)
+{
+    int i=0,n;
+    vector <Process> tempry(total);
+
+    while(total_time!=0)
+    {
+        if(arrived[i].execution_time==0)
+        {
+            cout<<"\n .... "<<arrived[i].processname<<" has FINISHED......"<<endl;
+            //arrived.erase(arrived.begin()+i);
+            //arrived.pop_back();
+            i++;
+        }
+        else if(arrived[i].execution_time>=1 & arrived[i].arrival_time == arrived[i+1].arrival_time)
+        {
+            if(arrived[i].priority < arrived[i+1].priority)
+            {
+                cout<<"\n Now Executing "<<arrived[i].processname<<i<<" time-remaining "<<arrived[i].execution_time<<"sec......"<<endl;
+                Sleep(1000);
+                arrived[i].execution_time=arrived[i].execution_time-1;
+                arrived[i].arrival_time=arrived[i].arrival_time+1;
+            }
+             else
+            {
+                cout<<"\n"<<arrived[i].processname<<" has been preempted by task "<<arrived[i+1].processname<<endl;
+                tempry[0]=arrived[i];
+                arrived[i]=arrived[i+1];
+                arrived[i+1]=tempry[0];
+                Sleep(1000);
+                arrived[i].execution_time=arrived[i].execution_time-1;
+                arrived[i].arrival_time=arrived[i].arrival_time+1;
+            }
+            total_time=total_time-1;
+        }
+        else
+        {
+                cout<<"\n Executing "<<arrived[i].processname<<" time-remaining "<<arrived[i].execution_time<<"sec......"<<endl;
+                Sleep(1000);
+                arrived[i].execution_time=arrived[i].execution_time-1;
+                arrived[i].arrival_time=arrived[i].arrival_time+1;
+                total_time=total_time-1;
+        }
+    }
+    cout<<"\n****************ALL the processes has been FINISHED**************** "<<endl;
+}
 
 /*
  *      \class  Schedule
@@ -284,7 +310,8 @@ int Schedule::collectProcess()
     {
         Process temp_process;
         temp_process.collectdata();
-//        itoa(count, buffer, 10);
+        snprintf(buffer, sizeof(buffer), "%d", count);
+        //itoa(count, buffer, 10);
         temp_process.set_name("Task " + string(buffer));
         collected_process.push(temp_process);
     } //After this we will have all the process sorted according to deadline
@@ -293,6 +320,7 @@ int Schedule::collectProcess()
     Schedule::processes = collected_process;
 
 }
+
 
 /*
  *      \class  Schedule
