@@ -10,6 +10,7 @@
  *       \copyright  Copyright (c) 2014, B&B Developers
  *                   jashnmalhi@yahoo.in
  */
+
 #include<iostream>
 #include<cstdlib>
 #include<windows.h>
@@ -18,7 +19,9 @@
 #include "../include/BasicStruct.h"
 #include <fstream>
 #include <sstream>
-#include<vector>
+#include <vector>
+
+
 using namespace std;
 
 Schedule::Schedule()
@@ -31,6 +34,11 @@ Schedule::~Schedule()
     //dtor
 }
 
+usProcessList ProcessatT(int time)
+{
+
+}
+
 
 /*
  *      \class  Schedule
@@ -40,7 +48,7 @@ Schedule::~Schedule()
  */
 int Schedule::runEDF ()
 {
-    Schedule::collectProcess();
+    Schedule::loadProcessFromFile("Sample.txt");
 
     if (Schedule::is_EDFSchedulable())
     {
@@ -53,15 +61,15 @@ int Schedule::runEDF ()
     }
 
 
-     ProcessList local = Schedule::processes;
+    ProcessList local = Schedule::processes;
 
-    while (!local.empty())
-    {
-        Process temp = local.top();
-        local.pop();
-        cout<<"Executing "<<temp.processname<<endl;
-        Sleep(1000);
-    }
+    //Start the loop
+    //Check if there is any process to be scheduled
+    //Arrange the process according to deadlines
+
+    //Create a function to arrange and return the first element after arranging.
+    //
+
 
 }
 /*
@@ -103,6 +111,7 @@ void Schedule::loadProcessFromFile(string filename)
         temp.execution_time = atoi(tokens[0].c_str());
         temp.period = atoi(tokens[1].c_str());
         temp.absolute_deadline = atoi(tokens[2].c_str());
+        temp.arrival_time = atoi(tokens[3].c_str());
 
         Schedule::processes.push(temp);
 
