@@ -15,6 +15,7 @@ public:
     int arrival_time;
     int relative_deadline;
     int absolute_deadline;
+    int id;
 
     Process();
     virtual ~Process();
@@ -22,6 +23,7 @@ public:
     void user_period();
     void collectdata();
     void set_name(std::string);
+
 protected:
 private:
 };
