@@ -81,4 +81,6 @@ void Process::collectdata()
 
     cout<<"Absolute Deadline of Task:";
     cin>>Process::absolute_deadline;
+
+    Process::priority=0;
 }
