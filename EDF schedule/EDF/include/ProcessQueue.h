@@ -1,3 +1,7 @@
+// *** ADDED BY HEADER FIXUP ***
+#include <queue>
+#include <vector>
+// *** END ***
 #include<vector>
 #include<queue>
 struct ProcessCompare

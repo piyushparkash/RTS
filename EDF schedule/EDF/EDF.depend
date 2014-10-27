@@ -27,21 +27,24 @@
 	<iostream>
 	"include/Schedule.h"
 
-1413888780 c:\users\theai\rts\edf schedule\edf\include\schedule.h
+1414443937 c:\users\theai\rts\edf schedule\edf\include\schedule.h
 	<vector>
 	<queue>
 	"Process.h"
 	"ProcessQueue.h"
 	"BasicStruct.h"
 
-1413715885 c:\users\theai\rts\edf schedule\edf\include\process.h
+1414443318 c:\users\theai\rts\edf schedule\edf\include\process.h
+	<string>
 	<string>
 
-1413813375 c:\users\theai\rts\edf schedule\edf\include\processqueue.h
+1414441039 c:\users\theai\rts\edf schedule\edf\include\processqueue.h
+	<queue>
+	<vector>
 	<vector>
 	<queue>
 
-1413715885 source:c:\users\theai\rts\edf schedule\edf\src\process.cpp
+1414443438 source:c:\users\theai\rts\edf schedule\edf\src\process.cpp
 	"../include/Process.h"
 	<iostream>
 

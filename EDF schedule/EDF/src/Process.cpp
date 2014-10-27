@@ -84,3 +84,38 @@ void Process::collectdata()
 
     Process::priority=0;
 }
+
+/** \brief
+ *
+ * \param tocompare Process
+ * \return bool
+ *
+ */
+bool Process::operator==(Process tocompare)
+{
+    if (Process::id == tocompare.id)
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
+/** \brief
+ *
+ * \return bool
+ *
+ */
+bool Process::isComplete()
+{
+    if (Process::executed == Process::execution_time)
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}

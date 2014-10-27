@@ -1,3 +1,6 @@
+// *** ADDED BY HEADER FIXUP ***
+#include <string>
+// *** END ***
 #ifndef PROCESS_H
 #define PROCESS_H
 #include<string>
@@ -23,6 +26,8 @@ public:
     void user_period();
     void collectdata();
     void set_name(std::string);
+    bool operator ==(Process);
+    bool isComplete();
 
 protected:
 private:

@@ -20,7 +20,7 @@
 #include <fstream>
 #include <sstream>
 #include <vector>
-
+#include <algorithm>
 
 using namespace std;
 
@@ -34,17 +34,12 @@ Schedule::~Schedule()
     //dtor
 }
 
-usProcessList ProcessatT(int time)
-{
-
-}
-
-bool allScheduled(usProcessList localprocesslist)
+bool Schedule::allScheduled(usProcessList localprocesslist)
 {
     bool found = false;
 
 
-    for(int i = 0; i < localprocesslist.size(); i++)
+    for(unsigned int i = 0; i < localprocesslist.size(); i++)
     {
         if (localprocesslist[i].execution_time != localprocesslist[i].executed)
         {
@@ -56,69 +51,31 @@ bool allScheduled(usProcessList localprocesslist)
     return !found;
 }
 
-/*
- *      \class  Schedule
- *      \fnctn  Schedule :: runEDF()
- *      \brief  User given data of Processes for EDF scheduling is collected then evaluated if they are schedulable or not.
- *              The schedulable processes are executed one by one.
- */
 
-void assignPriorities(usProcessList &processes)
-{
-    //We have the sorted process according to the deadline
-    //And we have to save this structure.
-    //So lets assign priority first
-    for (int i = 0; i < sortedprocess.size(); i++)
-    {
-        sortedprocess[i].priority = i;
-    }
-}
-
-usProcessList ProcessatT(usProcessList sortedprocess, int time)
-{
-
-    //Now we have to sort this vector according
-    //to the arrival time.
-    sort(sortedprocess.begin(), sortedprocess.end(), RMarrival);
-
-    //Now we have to return the process which fall under the given time.
-    usProcessList givenTime;
-    for(int i = 0; i < sortedprocess.size(); i++)
-    {
-        if (sortedprocess[i].arrival_time == time)
-        {
-            givenTime.push_back(sortedprocess[i]);
-        }
-    }
-
-    //We have the processes whose arrival time is given time
-
-    //Sort them according to deadline
-    sort(givenTime.begin(), givenTime.end(), ProcessCompare);
-
-    return givenTime;
-}
-usProcessList getNotScheduled(usProcessList localprocesslist)
+usProcessList Schedule::getNotScheduled(usProcessList localprocesslist)
 {
     for (int i = 0; i < localprocesslist.size(); i++)
     {
         if (localprocesslist[i].executed != localprocesslist[i].execution_time)
         {
-            localprocesslist.erase(localprocesslist.begin()+5)
+            localprocesslist.erase(localprocesslist.begin()+5);
         }
     }
 
     return localprocesslist;
 }
 
-unsigned int find_next_process(usProcessList &localprocesslist, unsigned int time)
+
+Process Schedule::find_next_process(usProcessList &localprocesslist, unsigned int time)
 {
     usProcessList processatt;
-    unsigned int index = priority = localprocesslist.size(); //Set to max priority
+    unsigned int index, priority;
+
+    index = priority = localprocesslist.size(); //Set to max priority
 
     for (int i = 0; i < localprocesslist.size(); i++)
     {
-        if (localprocesslist[i].arrival_time == time)
+        if (localprocesslist[i].arrival_time <= time)
         {
             processatt.push_back(localprocesslist[i]);
             if (localprocesslist[i].priority < priority)
@@ -129,12 +86,13 @@ unsigned int find_next_process(usProcessList &localprocesslist, unsigned int tim
         }
     }
 
-    Process toreturn = localprocesslist[i];
-    localprocesslist.erase(localprocesslist.begin()+i);
+    Process toreturn = localprocesslist[index];
+    localprocesslist.erase(localprocesslist.begin()+index);
     return toreturn;
 }
 
-void execute_onesec(Process &localprocess, unsigned int time)
+
+void Schedule::execute_onesec(Process &localprocess, unsigned int time)
 {
     if (localprocess.executed == 0)
     {
@@ -146,6 +104,13 @@ void execute_onesec(Process &localprocess, unsigned int time)
     }
     localprocess.executed++; //Increment stating, it has executed for 1 sec
 }
+
+/*
+ *      \class  Schedule
+ *      \fnctn  Schedule :: runEDF()
+ *      \brief  User given data of Processes for EDF scheduling is collected then evaluated if they are schedulable or not.
+ *              The schedulable processes are executed one by one.
+ */
 
 int Schedule::runEDF ()
 {
@@ -162,37 +127,41 @@ int Schedule::runEDF ()
     }
 
 
-    usProcessList localprocesslist = copyto_vector(Schedule::processes);
+    usProcessList localprocesslist = Schedule::copyto_vector(Schedule::processes);
     Schedule::set_priority(localprocesslist);
-    unsigned int process_no_executing, mainTime;
+    unsigned int mainTime;
     Process next_process, current_process;
 
     //Sorted according to arrival time
-    sort(tobescheduled.begin(), tobescheduled.end(), RMarrival);
+    RMarrival sortrm;
+    sort(localprocesslist.begin(), localprocesslist.end(), sortrm);
 
-    while(!allScheduled(localprocesslist))
+    while(!localprocesslist.empty())
     {
-        //This is when second loop is running
-        if (current_process.executed == current_process.execution_time) //it has been fully executed
-        {
-            //We find the next candidate
-            next_process = Schedule::find_next_process(localprocesslist, mainTime);
-        }
-
-        //Check the lowest process
+        //Find the next process to execute
         next_process = Schedule::find_next_process(localprocesslist, mainTime);
 
-        //We have the process to be executed. Execute it for 1 sec
-        Schedule::execute_onesec(localprocesslist, next_process, mainTime);
+        if (next_process == current_process)
+        {
+            execute_onesec(next_process, mainTime);
+        }
+        else
+        {
+            Schedule::preempt_process(current_process, next_process, mainTime);
+            execute_onesec(next_process, mainTime);
+        }
+
+        //Check if the process has completed
+        if (next_process.isComplete())
+        {
+            Schedule::removeTask(next_process, localprocesslist);
+        }
 
         mainTime++;
 
         //Store our current process
         current_process = next_process;
 
-
-        //Now one sec has passed. Deadlines have come closer.
-        //We have sort again and assign priorities again. I will have to store the whole process somewhere.
     }
     //Start the loop
     //Check if there is any process to be scheduled
@@ -205,10 +174,35 @@ int Schedule::runEDF ()
 }
 
 
-/*
- *      \class  Schedule
- *      \fnctn  Schedule :: loadProcessFromFile()
- *      \brief
+void Schedule::removeTask(Process toremove, usProcessList &inthis)
+{
+    //First thing would be to find this in the array
+}
+/** \brief This function swaps the current process with the process with which
+            it would be preempted.
+ *
+ * \param Process nextone Process which will preempted the current process
+ * \param Process firstone The current process which was running
+ * \param usigned time The main time counter
+ * \return none
+ *
+ */
+void Schedule::preempt_process(Process &nextone, Process &firstone, unsigned int time)
+{
+    swap(nextone, firstone);
+
+    //Print about the preemeption
+    cout<< "Task" << firstone.id <<" was preempted by Task " << nextone.id << " at T = " << time;
+
+}
+
+
+
+/**
+ *      \brief This functions loads the process from the file which is passed
+ *             as a parameter to the functions. These parameters are written
+ *             in the file delimited by space and one Process per line
+ *      \param string filename The name of the file which contains the parameters
  */
 void Schedule::loadProcessFromFile(string filename)
 {
@@ -275,7 +269,7 @@ int Schedule::runRM ()
     int total_time;
 
 
-    Schedule::loadProcessFromFile("Sample.txt")
+    Schedule::loadProcessFromFile("Sample.txt");
 
 
     RMUtil result = Schedule::is_RMSchedulable();
@@ -305,7 +299,7 @@ int Schedule::runRM ()
             {
                 if(temp[k].arrival_time>temp[k+1].arrival_time)
                 {
-                    vector<Process> for_sort(2);
+                    usProcessList for_sort(2);
                     for_sort[1]=temp[k];
                     temp[k]=temp[k+1];
                     temp[k+1]=for_sort[1];
@@ -361,7 +355,6 @@ ProcessListRM Schedule::convertRM(ProcessList processes)
     return converted;
 }
 
-
 void Schedule::set_priority(usProcessList &localprocesslist)
 {
     for (int i = 0; i < localprocesslist.size(); i++)
@@ -383,6 +376,8 @@ ProcessListarrive Schedule::compare(ProcessList processes)
 
     return arrival;
 }
+
+
 usProcessList Schedule::copyto_vector(ProcessList local)
 {
     usProcessList temp;
@@ -396,7 +391,7 @@ usProcessList Schedule::copyto_vector(ProcessList local)
     return temp;
 }
 
-void Schedule::RM_preemptive(int total_time,vector<Process> arrived,int total)
+void Schedule::RM_preemptive(int total_time,usProcessList arrived,int total)
 {
     int i=0,n;
     cout<<"\n ..........STARTED first Task "<<arrived[0].processname<<" at T = "<<total_time<<endl;
