@@ -30,7 +30,7 @@ class Schedule
         void getProcess();
         bool allScheduled(usProcessList);
         usProcessList getNotScheduled(usProcessList);
-        Process find_next_process(usProcessList&, unsigned int);
+        Process find_next_process(usProcessList&, unsigned int, int&);
         void execute_onesec(Process &, unsigned int);
 
         int runEDF();

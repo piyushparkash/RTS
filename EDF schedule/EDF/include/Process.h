@@ -1,9 +1,8 @@
-// *** ADDED BY HEADER FIXUP ***
-#include <string>
-// *** END ***
 #ifndef PROCESS_H
 #define PROCESS_H
 #include<string>
+
+class Process;
 
 class Process
 {
@@ -19,14 +18,12 @@ public:
     int relative_deadline;
     int absolute_deadline;
     int id;
-
     Process();
-    virtual ~Process();
     void set_period(int);
     void user_period();
     void collectdata();
     void set_name(std::string);
-    bool operator ==(Process);
+    bool operator == (Process);
     bool isComplete();
 
 protected:

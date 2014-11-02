@@ -14,14 +14,11 @@
 #include "../include/Process.h"
 #include <iostream>
 using namespace std;
+
+
 Process::Process()
 {
-    //ctor
-}
-
-Process::~Process()
-{
-    //dtor
+    executed = 0;
 }
 
 /*
@@ -91,7 +88,7 @@ void Process::collectdata()
  * \return bool
  *
  */
-bool Process::operator==(Process tocompare)
+bool Process::operator == (Process tocompare)
 {
     if (Process::id == tocompare.id)
     {

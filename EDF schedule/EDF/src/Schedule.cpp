@@ -66,7 +66,7 @@ usProcessList Schedule::getNotScheduled(usProcessList localprocesslist)
 }
 
 
-Process Schedule::find_next_process(usProcessList &localprocesslist, unsigned int time)
+Process Schedule::find_next_process(usProcessList &localprocesslist, unsigned int time, int &nothing)
 {
     usProcessList processatt;
     unsigned int index, priority;
@@ -86,8 +86,14 @@ Process Schedule::find_next_process(usProcessList &localprocesslist, unsigned in
         }
     }
 
+    //If no process is there at this time. Pull the flag
+    if (processatt.size() == 0)
+    {
+        nothing = 1;
+    }
+
+    // If the above flag is true, then this is of no importance
     Process toreturn = localprocesslist[index];
-    localprocesslist.erase(localprocesslist.begin()+index);
     return toreturn;
 }
 
@@ -96,11 +102,11 @@ void Schedule::execute_onesec(Process &localprocess, unsigned int time)
 {
     if (localprocess.executed == 0)
     {
-        cout<<"Task "<< localprocess.id <<" started executing at T = " << time;
+        cout<<"Task "<< localprocess.id <<" started executing at T = " << time << endl;
     }
     else
     {
-        cout<<"Task "<< localprocess.id <<" resumed execution at T = " << time;
+        cout<<"Task "<< localprocess.id <<" resumed execution at T = " << time << endl;
     }
     localprocess.executed++; //Increment stating, it has executed for 1 sec
 }
@@ -116,6 +122,8 @@ int Schedule::runEDF ()
 {
     Schedule::loadProcessFromFile("Sample.txt");
 
+    PrintTasks();
+
     if (Schedule::is_EDFSchedulable())
     {
         std::cout<<"Tasks are EDF Schedulable\n";
@@ -129,38 +137,54 @@ int Schedule::runEDF ()
 
     usProcessList localprocesslist = Schedule::copyto_vector(Schedule::processes);
     Schedule::set_priority(localprocesslist);
-    unsigned int mainTime;
+    unsigned int mainTime = 0;
     Process next_process, current_process;
 
     //Sorted according to arrival time
     RMarrival sortrm;
     sort(localprocesslist.begin(), localprocesslist.end(), sortrm);
 
+    int nothing = 0;
+
     while(!localprocesslist.empty())
     {
         //Find the next process to execute
-        next_process = Schedule::find_next_process(localprocesslist, mainTime);
+        next_process = Schedule::find_next_process(localprocesslist, mainTime, nothing);
 
-        if (next_process == current_process)
+        if (nothing == 1)
+        {
+            //The processor is going to be idle for this one
+            cout<<"The processor is going to be idle for this one" << endl;
+
+            //Reset the idle flagBc
+            nothing = 0;
+            mainTime++;
+            continue;
+        }
+        if (next_process == current_process || mainTime == 0)
         {
             execute_onesec(next_process, mainTime);
         }
         else
         {
             Schedule::preempt_process(current_process, next_process, mainTime);
-            execute_onesec(next_process, mainTime);
+            execute_onesec(current_process, mainTime);
         }
 
         //Check if the process has completed
         if (next_process.isComplete())
         {
             Schedule::removeTask(next_process, localprocesslist);
+            cout<<"Task " << next_process.id << " has completed it processing at time T = " << mainTime << endl;
         }
 
         mainTime++;
 
         //Store our current process
         current_process = next_process;
+
+        //Reset the idle flag
+        nothing = false;
 
     }
     //Start the loop
@@ -177,6 +201,28 @@ int Schedule::runEDF ()
 void Schedule::removeTask(Process toremove, usProcessList &inthis)
 {
     //First thing would be to find this in the array
+    int index_to_find = -1;
+    for (unsigned int i = 0; i < inthis.size(); i++)
+    {
+        if (inthis[i] == toremove)
+        {
+            index_to_find = i;
+        }
+    }
+
+
+
+    //This is just in case if error occurs
+    if (index_to_find < 0)
+    {
+        cout<<"Please check remove task. There is an error";
+    }
+    else
+    {
+        //We should have the index
+        inthis.erase(inthis.begin()+index_to_find);
+    }
+
 }
 /** \brief This function swaps the current process with the process with which
             it would be preempted.
@@ -187,13 +233,13 @@ void Schedule::removeTask(Process toremove, usProcessList &inthis)
  * \return none
  *
  */
-void Schedule::preempt_process(Process &nextone, Process &firstone, unsigned int time)
+void Schedule::preempt_process(Process &firstone, Process &nextone, unsigned int time)
 {
-    swap(nextone, firstone);
+    //Print the Preemption
+    cout<< "Task " << firstone.id <<" was preempted by Task " << nextone.id << " at T = " << time << endl;
 
-    //Print about the preemeption
-    cout<< "Task" << firstone.id <<" was preempted by Task " << nextone.id << " at T = " << time;
-
+    //Copy the contents of the nextone in the firstone
+    firstone = nextone;
 }
 
 
@@ -288,27 +334,27 @@ int Schedule::runRM ()
         }
 
         //function to set value to priority variable according to the asscending order of their period.
-        for(int j=0;j<total;j++)
-            {
-                temp[j].priority=j;
-            }
-        //function to compare the processes according to their arrival time
-        for(int m=0;m<total;m++)
+        for(int j=0; j<total; j++)
         {
-            for(int k=0;k<total;k++)
+            temp[j].priority=j;
+        }
+        //function to compare the processes according to their arrival time
+        for(int m=0; m<total; m++)
+        {
+            for(int k=0; k<total; k++)
             {
                 if(temp[k].arrival_time>temp[k+1].arrival_time)
                 {
                     usProcessList for_sort(2);
-                    for_sort[1]=temp[k];
+                    for_sort.push_back(temp[k]);
                     temp[k]=temp[k+1];
-                    temp[k+1]=for_sort[1];
+                    temp[k+1]=for_sort[0];
                 }
             }
-        total_time=total_time+temp[m].execution_time;
+            total_time=total_time+temp[m].execution_time;
         }
         //function to find schedule for preempted tasks
-         Schedule::RM_preemptive(total_time,temp,total);
+        Schedule::RM_preemptive(total_time,temp,total);
     }
     else
     {
@@ -326,7 +372,7 @@ int Schedule::runRM ()
         cout<<"\nExecuting "<<temp.processname<<" expected time "<<temp.execution_time<<"sec......"<<endl;
         Sleep(temp.execution_time*1000);
     }
-*/
+    */
 }
 
 
@@ -579,7 +625,7 @@ void Schedule::PrintTasks()
     {
         Process temp = local.top();
         local.pop();
-        cout<<temp.absolute_deadline<<endl;
+        cout<<temp.id<<endl;
     }
 
 }
