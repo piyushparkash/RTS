@@ -14,14 +14,11 @@
 #include "../include/Process.h"
 #include <iostream>
 using namespace std;
+
+
 Process::Process()
 {
-    //ctor
-}
-
-Process::~Process()
-{
-    //dtor
+    executed = 0;
 }
 
 /*
@@ -83,4 +80,39 @@ void Process::collectdata()
     cin>>Process::absolute_deadline;
 
     Process::priority=0;
+}
+
+/** \brief
+ *
+ * \param tocompare Process
+ * \return bool
+ *
+ */
+bool Process::operator == (Process tocompare)
+{
+    if (Process::id == tocompare.id)
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
+/** \brief
+ *
+ * \return bool
+ *
+ */
+bool Process::isComplete()
+{
+    if (Process::executed == Process::execution_time)
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
 }

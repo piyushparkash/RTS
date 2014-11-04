@@ -33,3 +33,4 @@ struct RMarrival
 typedef std::priority_queue<Process, std::vector<Process>, ProcessCompare> ProcessList;
 typedef std::priority_queue<Process, std::vector<Process>, RMCompare> ProcessListRM;
 typedef std::priority_queue<Process, std::vector<Process>, RMarrival> ProcessListarrive;
+typedef std::vector<Process> usProcessList;

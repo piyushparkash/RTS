@@ -28,17 +28,24 @@ class Schedule
 
         void loadProcessFromFile(std::string);
         void getProcess();
+        bool allScheduled(usProcessList);
+        usProcessList getNotScheduled(usProcessList);
+        Process find_next_process(usProcessList&, unsigned int, int&);
+        void execute_onesec(Process &, unsigned int);
+
         int runEDF();
         int runRM();
         int collectProcess();
         void PrintTasks();
         bool is_EDFSchedulable();
-        int set_priority(std::vector<Process>,int);
-        std::vector<Process> copyto_vector(ProcessListarrive);
-        void RM_preemptive(int,std::vector<Process>,int);
+        void set_priority(usProcessList&);
+        usProcessList copyto_vector(ProcessList);
+        void RM_preemptive(int,usProcessList,int);
         RMUtil is_RMSchedulable();
         ProcessListRM convertRM(ProcessList);
         ProcessListarrive compare(ProcessList);
+        void preempt_process(Process&, Process&, unsigned int);
+        void removeTask(Process, usProcessList&);
 
     protected:
     private:
