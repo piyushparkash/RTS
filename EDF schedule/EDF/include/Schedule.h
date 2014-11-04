@@ -30,8 +30,8 @@ class Schedule
         void getProcess();
         bool allScheduled(usProcessList);
         usProcessList getNotScheduled(usProcessList);
-        Process find_next_process(usProcessList&, unsigned int, int&);
-        void execute_onesec(Process &, unsigned int);
+        usProcessList::iterator find_next_process(usProcessList&, unsigned int, int&);
+        void execute_onesec(usProcessList::iterator, unsigned int);
 
         int runEDF();
         int runRM();
@@ -44,8 +44,9 @@ class Schedule
         RMUtil is_RMSchedulable();
         ProcessListRM convertRM(ProcessList);
         ProcessListarrive compare(ProcessList);
-        void preempt_process(Process&, Process&, unsigned int);
-        void removeTask(Process, usProcessList&);
+        void preempt_process(usProcessList::iterator, usProcessList::iterator, unsigned int);
+        void removeTask(usProcessList::iterator, usProcessList&);
+        bool idle;
 
     protected:
     private:

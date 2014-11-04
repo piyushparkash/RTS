@@ -66,9 +66,10 @@ usProcessList Schedule::getNotScheduled(usProcessList localprocesslist)
 }
 
 
-Process Schedule::find_next_process(usProcessList &localprocesslist, unsigned int time, int &nothing)
+usProcessList::iterator Schedule::find_next_process(usProcessList &localprocesslist, unsigned int time, int &nothing)
 {
     usProcessList processatt;
+    usProcessList::iterator it;
     unsigned int index, priority;
 
     index = priority = localprocesslist.size(); //Set to max priority
@@ -93,22 +94,22 @@ Process Schedule::find_next_process(usProcessList &localprocesslist, unsigned in
     }
 
     // If the above flag is true, then this is of no importance
-    Process toreturn = localprocesslist[index];
-    return toreturn;
+    it = localprocesslist.begin()+index;
+    return it;
 }
 
 
-void Schedule::execute_onesec(Process &localprocess, unsigned int time)
+void Schedule::execute_onesec(usProcessList::iterator localprocess, unsigned int time)
 {
-    if (localprocess.executed == 0)
+    if (localprocess->executed == 0)
     {
-        cout<<"Task "<< localprocess.id <<" started executing at T = " << time << endl;
+        cout<<"Task "<< localprocess->id <<" started executing at T = " << time << endl;
     }
     else
     {
-        cout<<"Task "<< localprocess.id <<" resumed execution at T = " << time << endl;
+        cout<<"Task "<< localprocess->id <<" resumed execution at T = " << time << endl;
     }
-    localprocess.executed++; //Increment stating, it has executed for 1 sec
+    localprocess->executed++; //Increment stating, it has executed for 1 sec
 }
 
 /*
@@ -138,7 +139,7 @@ int Schedule::runEDF ()
     usProcessList localprocesslist = Schedule::copyto_vector(Schedule::processes);
     Schedule::set_priority(localprocesslist);
     unsigned int mainTime = 0;
-    Process next_process, current_process;
+    usProcessList::iterator next_process, current_process;
 
     //Sorted according to arrival time
     RMarrival sortrm;
@@ -156,32 +157,42 @@ int Schedule::runEDF ()
             //The processor is going to be idle for this one
             cout<<"The processor is going to be idle for this one" << endl;
 
-            //Reset the idle flagBc
+            //Reset the idle flag
             nothing = 0;
             mainTime++;
             continue;
         }
-        if (next_process == current_process || mainTime == 0)
+
+        if (idle) //If the previous task has completed its execution, there is nothing on the processor
+        {
+            execute_onesec(next_process, mainTime);
+            idle = false;
+        }
+        else if (next_process == current_process || mainTime == 0)
         {
             execute_onesec(next_process, mainTime);
         }
         else
         {
-            Schedule::preempt_process(current_process, next_process, mainTime);
+            preempt_process(current_process, next_process, mainTime);
             execute_onesec(current_process, mainTime);
         }
 
-        //Check if the process has completed
-        if (next_process.isComplete())
-        {
-            Schedule::removeTask(next_process, localprocesslist);
-            cout<<"Task " << next_process.id << " has completed it processing at time T = " << mainTime << endl;
-        }
-
+        //One sec work is done, increment the time
         mainTime++;
 
-        //Store our current process
-        current_process = next_process;
+        //Check if the process has completed
+        if (next_process->isComplete())
+        {
+            cout<<"Task " << next_process->id << " has completed it processing at time T = " << mainTime << endl;
+            removeTask(next_process, localprocesslist);
+            idle = true;
+        }
+        else
+        {
+            //Store our current process
+            current_process = next_process;
+        }
 
         //Reset the idle flag
         nothing = false;
@@ -198,32 +209,13 @@ int Schedule::runEDF ()
 }
 
 
-void Schedule::removeTask(Process toremove, usProcessList &inthis)
+void Schedule::removeTask(usProcessList::iterator toremove, usProcessList &inthis)
 {
-    //First thing would be to find this in the array
-    int index_to_find = -1;
-    for (unsigned int i = 0; i < inthis.size(); i++)
-    {
-        if (inthis[i] == toremove)
-        {
-            index_to_find = i;
-        }
-    }
-
-
-
-    //This is just in case if error occurs
-    if (index_to_find < 0)
-    {
-        cout<<"Please check remove task. There is an error";
-    }
-    else
-    {
-        //We should have the index
-        inthis.erase(inthis.begin()+index_to_find);
-    }
-
+        inthis.erase(toremove);
 }
+
+
+
 /** \brief This function swaps the current process with the process with which
             it would be preempted.
  *
@@ -233,10 +225,10 @@ void Schedule::removeTask(Process toremove, usProcessList &inthis)
  * \return none
  *
  */
-void Schedule::preempt_process(Process &firstone, Process &nextone, unsigned int time)
+void Schedule::preempt_process(usProcessList::iterator firstone, usProcessList::iterator nextone, unsigned int time)
 {
     //Print the Preemption
-    cout<< "Task " << firstone.id <<" was preempted by Task " << nextone.id << " at T = " << time << endl;
+    cout<< "Task " << firstone->id <<" was preempted by Task " << nextone->id << " at T = " << time << endl;
 
     //Copy the contents of the nextone in the firstone
     firstone = nextone;
