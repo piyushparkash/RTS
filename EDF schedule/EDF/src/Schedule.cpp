@@ -112,7 +112,7 @@ void Schedule::execute_onesec(usProcessList::iterator localprocess, unsigned int
     localprocess->executed++; //Increment stating, it has executed for 1 sec
 }
 
-/*
+/**
  *      \class  Schedule
  *      \fnctn  Schedule :: runEDF()
  *      \brief  User given data of Processes for EDF scheduling is collected then evaluated if they are schedulable or not.
@@ -121,7 +121,7 @@ void Schedule::execute_onesec(usProcessList::iterator localprocess, unsigned int
 
 int Schedule::runEDF ()
 {
-    Schedule::loadProcessFromFile("Sample.txt");
+    loadProcessFromFile("Sample.txt");
 
     PrintTasks();
 
@@ -198,17 +198,18 @@ int Schedule::runEDF ()
         nothing = false;
 
     }
-    //Start the loop
-    //Check if there is any process to be scheduled
-    //Arrange the process according to deadlines
-
-    //Create a function to arrange and return the first element after arranging.
-    //
 
 
 }
 
 
+/** \brief This functions removes the process from the localprocesslist which has completed its execution.
+ *
+ * \param toremove usProcessList::iterator The iterator pointing towards the process to remove
+ * \param inthis usProcessList& The list of processes
+ * \return void
+ *
+ */
 void Schedule::removeTask(usProcessList::iterator toremove, usProcessList &inthis)
 {
         inthis.erase(toremove);
@@ -216,8 +217,7 @@ void Schedule::removeTask(usProcessList::iterator toremove, usProcessList &inthi
 
 
 
-/** \brief This function swaps the current process with the process with which
-            it would be preempted.
+/** \brief This functions just outputs the preemption on the screen for the user to understand
  *
  * \param Process nextone Process which will preempted the current process
  * \param Process firstone The current process which was running
@@ -291,7 +291,7 @@ void Schedule::loadProcessFromFile(string filename)
 }
 
 
-/*
+/**
  *      \class  Schedule
  *      \fnctn  Schedule :: rumRM()
  *      \brief  User will be asked to type the process data for RM scheduling through "collectprocess" function then,
@@ -301,13 +301,14 @@ void Schedule::loadProcessFromFile(string filename)
 
 int Schedule::runRM ()
 {
-    vector <Process> temp;
+    usProcessList temp;
 
     int total=0;
     int total_time;
 
 
     Schedule::loadProcessFromFile("Sample.txt");
+    PrintTasks();
 
 
     RMUtil result = Schedule::is_RMSchedulable();
