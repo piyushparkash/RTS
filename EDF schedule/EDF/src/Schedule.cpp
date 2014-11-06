@@ -338,10 +338,7 @@ int Schedule::runRM ()
             {
                 if(temp[k].arrival_time>temp[k+1].arrival_time)
                 {
-                    usProcessList for_sort(2);
-                    for_sort.push_back(temp[k]);
-                    temp[k]=temp[k+1];
-                    temp[k+1]=for_sort[0];
+                    swap(temp[k], temp[k+1]);
                 }
             }
             total_time=total_time+temp[m].execution_time;
