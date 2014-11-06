@@ -2,8 +2,6 @@
 #define PROCESS_H
 #include<string>
 
-class Process;
-
 class Process
 {
 public:

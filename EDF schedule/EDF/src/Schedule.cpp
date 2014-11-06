@@ -334,7 +334,7 @@ int Schedule::runRM ()
         //function to compare the processes according to their arrival time
         for(int m=0; m<total; m++)
         {
-            for(int k=0; k<total; k++)
+            for(int k=0; k<total-1; k++)
             {
                 if(temp[k].arrival_time>temp[k+1].arrival_time)
                 {
