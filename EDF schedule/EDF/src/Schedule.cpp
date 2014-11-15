@@ -452,7 +452,7 @@ void Schedule::RM_preemptive(int total_time,usProcessList arrived,int total)
                 Sleep(1000);
                 arrived[i].execution_time=arrived[i].execution_time-1;
                 arrived[i].arrival_time=arrived[i].arrival_time+1;
-                i++;
+               // i++;
             }
             else
             {
