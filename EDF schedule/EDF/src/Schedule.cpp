@@ -431,6 +431,7 @@ void Schedule::RM_preemptive(int total_time,usProcessList arrived,int total)
 {
     int i=0,n;
     cout<<"\n ..........STARTED first Task "<<arrived[0].processname<<" at T = "<<total_time<<endl;
+
     while(total_time!=0)
     {
         if(arrived[i].execution_time==0)
@@ -452,7 +453,7 @@ void Schedule::RM_preemptive(int total_time,usProcessList arrived,int total)
                 Sleep(1000);
                 arrived[i].execution_time=arrived[i].execution_time-1;
                 arrived[i].arrival_time=arrived[i].arrival_time+1;
-                i++;
+                //i++;
             }
             else
             {
@@ -481,7 +482,7 @@ void Schedule::RM_preemptive(int total_time,usProcessList arrived,int total)
     cout<<"\n****************ALL the processes has been FINISHED**************** "<<endl;
 }
 
-/*
+/**
  *      \class  Schedule
  *      \fnctn  Schedule::collectProcess()
  *      \brief  A local variable named "no_process" will store the total no of process(given by user)
