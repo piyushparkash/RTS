@@ -21,7 +21,7 @@ Process::Process()
     executed = 0;
 }
 
-/*
+/**
  *      \file   Process.cc
  *      \fnctn  Process::set_period(int userperiod)
  *      \brief  It will get the value of process period as a argument and
@@ -33,7 +33,7 @@ void Process::set_period(int userperiod)
     period = userperiod;
 }
 
-/*
+/**
  *      \file   Process.cc
  *      \fnctn  Process::user_period(int userperiod)
  *      \brief  It will get the value of process period from the user through console and
@@ -47,7 +47,7 @@ void Process::user_period()
     Process::set_period(period);
 }
 
-/*
+/**
  *      \file   Process.cc
  *      \fnctn  Process::set_name(string name)
  *      \brief  It will get the value of process name as a argument and
@@ -57,7 +57,7 @@ void Process::set_name(string name)
 {
     Process::processname = name;
 }
-/*
+/**
  *      \file   Process.cc
  *      \fnctn  Process::collectdata()
  *      \brief  It will get the value of process execution_time,Period,Absolute Deadline as a

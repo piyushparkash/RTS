@@ -35,6 +35,8 @@ class Schedule
 
         int runEDF();
         int runRM();
+        int lcm(usProcessList);
+        int GCD(int,int);
         int collectProcess();
         void PrintTasks();
         bool is_EDFSchedulable();
