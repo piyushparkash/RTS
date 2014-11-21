@@ -116,3 +116,21 @@ bool Process::isComplete()
         return false;
     }
 }
+
+ExecutionTime Process::processor(ProcessorList::iterator itr)
+{
+    bool found = false;
+    for (unsigned int i = 0; i < execution_time.size(); i++ )
+    {
+        if (execution_time[i].processor == itr)
+        {
+            found = true;
+            break;
+        }
+    }
+
+    if (found)
+    {
+        return execution_time[i];
+    }
+}

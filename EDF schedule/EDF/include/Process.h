@@ -2,11 +2,19 @@
 #define PROCESS_H
 #include<string>
 
+#include"Processor.h"
+struct ExecutionTime
+{
+    ProcessorList::iterator processor;
+    int execution_time;
+    int eneryconsumed;
+};
+
 class Process
 {
 public:
     std::string processname;
-    int execution_time;
+    ExecutionTime execution_time;
     int executed;
     int is_periodic;
     int period;
@@ -23,6 +31,7 @@ public:
     void set_name(std::string);
     bool operator == (Process);
     bool isComplete();
+    ExecutionTime processor(ProcessorList::iterator);
 
 protected:
 private:

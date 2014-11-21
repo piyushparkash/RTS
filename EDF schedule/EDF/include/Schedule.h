@@ -26,6 +26,11 @@ class Schedule
         // Variable to store all the process classes
         ProcessList processes;
 
+        //Energy Per unit time
+        float energyput = 1;
+        int noproccessor = 2;
+        ProcessorList processorlist;
+
         void loadProcessFromFile(std::string);
         void getProcess();
         bool allScheduled(usProcessList);

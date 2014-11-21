@@ -26,7 +26,13 @@ using namespace std;
 
 Schedule::Schedule()
 {
-    //ctor
+    processorlist.resize(noproccessor);
+
+    //Assign Ids to each of the processor
+    for (unsigned int i = 0; i < processorlist.size(); i++)
+    {
+        processorlist[i].id = i;
+    }
 }
 
 Schedule::~Schedule()
@@ -212,7 +218,7 @@ int Schedule::runEDF ()
  */
 void Schedule::removeTask(usProcessList::iterator toremove, usProcessList &inthis)
 {
-        inthis.erase(toremove);
+    inthis.erase(toremove);
 }
 
 
@@ -234,6 +240,19 @@ void Schedule::preempt_process(usProcessList::iterator firstone, usProcessList::
     firstone = nextone;
 }
 
+vector<string> extract_token(string line)
+{
+    stringstream sst(line);
+    string varstring;
+    vector<string> tokens;
+    while(sst >> varstring)
+    {
+        tokens.push_back(varstring);
+        varstring.clear();
+    }
+
+    return tokens;
+}
 
 
 /**
@@ -242,49 +261,60 @@ void Schedule::preempt_process(usProcessList::iterator firstone, usProcessList::
  *             in the file delimited by space and one Process per line
  *      \param string filename The name of the file which contains the parameters
  */
-void Schedule::loadProcessFromFile(string filename)
+void Schedule::loadProcessFromFile(string filename, string exefilename, string energyfilename)
 {
-    fstream file;
+    fstream file, exefile, energyfile;
     string line;
     file.open(filename.c_str());
+    exefile.open(exefilename.c_str());
+    energyfile.open(energyfilename.c_str());
 
-    if (!file.is_open())
+
+    if (!file.is_open() || !exefile.is_open() || !energyfile.is_open())
     {
         cout<<"Could not find file. Please check";
         return;
     }
 
-    string var;
-    vector<string> tokens;
-    Process temp;
     int counter = 0;
-
-
     while(!file.eof())
     {
+        string exeline, energyline;
+
         //Right Now we have 3 variables that needs to be fetched
         std::getline(file,line);
-        istringstream streamline(line);
+        std::getline(exefile, exeline);
+        std::getline(energyfile, energyline);
 
-        //get the three written numbers in the file
-        while (streamline >> var)
+        //Vectors to hold the tokens from the 3 files
+        vector<string> tokens = extract_token(line);
+        vector<string> exetokens = extract_token(exeline);
+        vector<string> energytokens = extract_token(energyline);
+
+
+        //Load the Execution Times
+        for (unsigned i = 0; i < noproccessor; i++)
         {
-            tokens.push_back(var);
-            var.clear();
+            for (unsigned j = 0; j < processorlist[i].VoltageLevels.size(); j++)
+            {
+                //Insert value in the Process;
+                Process temp;
+                temp.period = atoi(tokens[1].c_str());
+                temp.absolute_deadline = atoi(tokens[2].c_str());
+                temp.arrival_time = atoi(tokens[3].c_str());
+                temp.id = counter;
+                temp.execution_time.execution_time = atoi(exetokens[j].c_str());
+                temp.execution_time.eneryconsumed = atoi(energytokens[j].c_str());
+                temp.execution_time.processor = processorlist.begin() + i;
+                Schedule::processes.push(temp);
+            }
         }
-
-        //Insert value in the Process;
-        temp.execution_time = atoi(tokens[0].c_str());
-        temp.period = atoi(tokens[1].c_str());
-        temp.absolute_deadline = atoi(tokens[2].c_str());
-        temp.arrival_time = atoi(tokens[3].c_str());
-        temp.id = counter;
-
-        Schedule::processes.push(temp);
 
 
         //Reset the vector and the string
         tokens.erase(tokens.begin(), tokens.end());
+        exetokens.erase(exetokens.begin(), exetokens.end());
+        energytokens.erase(energytokens.begin(), energytokens.end());
         var.clear();
         counter++;
     }

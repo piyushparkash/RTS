@@ -1,5 +1,8 @@
 #include<vector>
 #include<queue>
+
+#include"Process.h"
+
 struct ProcessCompare
 {
     bool operator()(const Process &p1, const Process &p2) const
