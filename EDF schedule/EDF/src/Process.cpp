@@ -11,10 +11,10 @@
  *                   jashnmalhi@yahoo.in
  */
 
-#include "../include/Process.h"
 #include <iostream>
 using namespace std;
 
+#include "Process.h"
 
 Process::Process()
 {
@@ -65,9 +65,6 @@ void Process::set_name(string name)
  */
 void Process::collectdata()
 {
-    cout<<"Execution time of task:";
-    cin>>Process::execution_time;
-    Process::executed=Process::execution_time;
 
     cout<<"Period Of Task:";
     cin>>Process::period;
@@ -100,37 +97,4 @@ bool Process::operator == (Process tocompare)
     }
 }
 
-/** \brief
- *
- * \return bool
- *
- */
-bool Process::isComplete()
-{
-    if (Process::executed == Process::execution_time)
-    {
-        return true;
-    }
-    else
-    {
-        return false;
-    }
-}
 
-ExecutionTime Process::processor(ProcessorList::iterator itr)
-{
-    bool found = false;
-    for (unsigned int i = 0; i < execution_time.size(); i++ )
-    {
-        if (execution_time[i].processor == itr)
-        {
-            found = true;
-            break;
-        }
-    }
-
-    if (found)
-    {
-        return execution_time[i];
-    }
-}

@@ -2,5 +2,5 @@
 
 Processor::Processor()
 {
-    VoltageLevel = [2.2, 3];
+    VoltageLevel = {2, 3};
 }

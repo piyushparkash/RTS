@@ -1,6 +1,9 @@
 #ifndef PROCESSOR_H
 #define PROCESSOR_H
-#include "ProcessQueue.h"
+#include<vector>
+#include<queue>
+
+#include "Process.h"
 
 class Processor
 {
@@ -8,11 +11,12 @@ class Processor
         /** Default constructor */
         Processor();
 
-        usProcessList tasks;
-        vector<int> VoltageLevel;
+        int id;
+
+        std::vector<float> VoltageLevel;
     protected:
     private:
 };
 
-typedef vector<Processor> ProcessorList;
+typedef std::vector<Processor> ProcessorList;
 #endif // PROCESSOR_H

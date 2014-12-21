@@ -13,6 +13,7 @@
 				<Option compiler="gcc" />
 				<Compiler>
 					<Add option="-g" />
+					<Add directory="include" />
 				</Compiler>
 			</Target>
 			<Target title="Release">
@@ -22,6 +23,7 @@
 				<Option compiler="gcc" />
 				<Compiler>
 					<Add option="-O2" />
+					<Add directory="include" />
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
@@ -35,9 +37,11 @@
 		<Unit filename="include/BasicStruct.h" />
 		<Unit filename="include/Process.h" />
 		<Unit filename="include/ProcessQueue.h" />
+		<Unit filename="include/Processor.h" />
 		<Unit filename="include/Schedule.h" />
 		<Unit filename="main.cpp" />
 		<Unit filename="src/Process.cpp" />
+		<Unit filename="src/Processor.cpp" />
 		<Unit filename="src/Schedule.cpp" />
 		<Extensions>
 			<code_completion />

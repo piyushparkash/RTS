@@ -15,8 +15,8 @@
 #include<cstdlib>
 #include<windows.h>
 #include<math.h>
-#include "../include/Schedule.h"
-#include "../include/BasicStruct.h"
+#include "Schedule.h"
+#include "BasicStruct.h"
 #include <fstream>
 #include <sstream>
 #include <vector>
@@ -40,37 +40,6 @@ Schedule::~Schedule()
     //dtor
 }
 
-bool Schedule::allScheduled(usProcessList localprocesslist)
-{
-    bool found = false;
-
-
-    for(unsigned int i = 0; i < localprocesslist.size(); i++)
-    {
-        if (localprocesslist[i].execution_time != localprocesslist[i].executed)
-        {
-            found = true;
-            break;
-        }
-    }
-
-    return !found;
-}
-
-
-usProcessList Schedule::getNotScheduled(usProcessList localprocesslist)
-{
-    for (int i = 0; i < localprocesslist.size(); i++)
-    {
-        if (localprocesslist[i].executed != localprocesslist[i].execution_time)
-        {
-            localprocesslist.erase(localprocesslist.begin()+5);
-        }
-    }
-
-    return localprocesslist;
-}
-
 
 usProcessList::iterator Schedule::find_next_process(usProcessList &localprocesslist, unsigned int time, int &nothing)
 {
@@ -80,7 +49,7 @@ usProcessList::iterator Schedule::find_next_process(usProcessList &localprocessl
 
     index = priority = localprocesslist.size(); //Set to max priority
 
-    for (int i = 0; i < localprocesslist.size(); i++)
+    for (unsigned int i = 0; i < localprocesslist.size(); i++)
     {
         if (localprocesslist[i].arrival_time <= time)
         {
@@ -127,7 +96,7 @@ void Schedule::execute_onesec(usProcessList::iterator localprocess, unsigned int
 
 int Schedule::runEDF ()
 {
-    loadProcessFromFile("Sample.txt");
+    loadProcessFromFile("Sample.txt", "exetime.txt", "energy.txt");
 
     PrintTasks();
 
@@ -188,7 +157,7 @@ int Schedule::runEDF ()
         mainTime++;
 
         //Check if the process has completed
-        if (next_process->isComplete())
+        if (true /* next_process->isComplete() */)
         {
             cout<<"Task " << next_process->id << " has completed it processing at time T = " << mainTime << endl;
             removeTask(next_process, localprocesslist);
@@ -292,21 +261,26 @@ void Schedule::loadProcessFromFile(string filename, string exefilename, string e
         vector<string> energytokens = extract_token(energyline);
 
 
+        Process temp;
+        temp.period = atoi(tokens[1].c_str());
+        temp.absolute_deadline = atoi(tokens[2].c_str());
+        temp.arrival_time = atoi(tokens[3].c_str());
+        temp.id = counter;
+
         //Load the Execution Times
         for (unsigned i = 0; i < noproccessor; i++)
         {
-            for (unsigned j = 0; j < processorlist[i].VoltageLevels.size(); j++)
+
+            for (unsigned j = 0; j < processorlist[i].VoltageLevel.size(); j++)
             {
                 //Insert value in the Process;
-                Process temp;
-                temp.period = atoi(tokens[1].c_str());
-                temp.absolute_deadline = atoi(tokens[2].c_str());
-                temp.arrival_time = atoi(tokens[3].c_str());
-                temp.id = counter;
-                temp.execution_time.execution_time = atoi(exetokens[j].c_str());
-                temp.execution_time.eneryconsumed = atoi(energytokens[j].c_str());
-                temp.execution_time.processor = processorlist.begin() + i;
+                ExecutionTime extemp;
+                extemp.execution_time = atoi(exetokens[j].c_str());
+                extemp.eneryconsumed = atoi(energytokens[j].c_str());
+                extemp.processor = processorlist.begin() + i;
+                extemp.processid = counter;
                 Schedule::processes.push(temp);
+                executetimes.push_back(extemp);
             }
         }
 
@@ -315,7 +289,6 @@ void Schedule::loadProcessFromFile(string filename, string exefilename, string e
         tokens.erase(tokens.begin(), tokens.end());
         exetokens.erase(exetokens.begin(), exetokens.end());
         energytokens.erase(energytokens.begin(), energytokens.end());
-        var.clear();
         counter++;
     }
 }
@@ -337,7 +310,6 @@ int Schedule::runRM ()
     int total_time;
 
 
-    Schedule::loadProcessFromFile("Sample.txt");
     PrintTasks();
 
 
@@ -371,7 +343,7 @@ int Schedule::runRM ()
                     swap(temp[k], temp[k+1]);
                 }
             }
-            total_time=total_time+temp[m].execution_time;
+//            total_time=total_time+temp[m].execution_time; //This needs a fix
         }
         //function to find schedule for preempted tasks
         Schedule::RM_preemptive(total_time,temp,total);
@@ -464,7 +436,7 @@ void Schedule::RM_preemptive(int total_time,usProcessList arrived,int total)
 
     while(total_time!=0)
     {
-        if(arrived[i].execution_time==0)
+        if(true/* arrived[i].execution_time==0 */)
         {
             cout<<"\n .... "<<arrived[i].processname<<" has FINISHED...at T = "<<total_time<<endl;
             Sleep(1000);
@@ -474,14 +446,14 @@ void Schedule::RM_preemptive(int total_time,usProcessList arrived,int total)
             //arrived.pop_back();
 
         }
-        else if(arrived[i].execution_time>=1 & arrived[i].arrival_time == arrived[i+1].arrival_time)
+        else if(true /* arrived[i].execution_time>=1 & arrived[i].arrival_time == arrived[i+1].arrival_time */)
         {
             if(arrived[i].priority < arrived[i+1].priority)
             {
                 Sleep(1000);
-                cout<<"\n Still Executing "<<arrived[i].processname<<" time-remaining "<<arrived[i].execution_time<<"sec......"<<endl;
+                //cout<<"\n Still Executing "<<arrived[i].processname<<" time-remaining "<<arrived[i].execution_time<<"sec......"<<endl;
                 Sleep(1000);
-                arrived[i].execution_time=arrived[i].execution_time-1;
+//                arrived[i].execution_time=arrived[i].execution_time-1;
                 arrived[i].arrival_time=arrived[i].arrival_time+1;
                 //i++;
             }
@@ -494,7 +466,7 @@ void Schedule::RM_preemptive(int total_time,usProcessList arrived,int total)
                 tempry[0]=arrived[i];
                 arrived[i]=arrived[i+1];
                 arrived[i+1]=tempry[0];
-                arrived[i].execution_time=arrived[i].execution_time-1;
+//                arrived[i].execution_time=arrived[i].execution_time-1;
                 arrived[i].arrival_time=arrived[i].arrival_time+1;
 
             }
@@ -502,9 +474,9 @@ void Schedule::RM_preemptive(int total_time,usProcessList arrived,int total)
         }
         else
         {
-            cout<<"\n Executing "<<arrived[i].processname<<" time-remaining "<<arrived[i].execution_time<<"sec......"<<endl;
+//            cout<<"\n Executing "<<arrived[i].processname<<" time-remaining "<<arrived[i].execution_time<<"sec......"<<endl;
             Sleep(1000);
-            arrived[i].execution_time=arrived[i].execution_time-1;
+//            arrived[i].execution_time=arrived[i].execution_time-1;
             arrived[i].arrival_time=arrived[i].arrival_time+1;
             total_time=total_time-1;
         }
@@ -566,7 +538,7 @@ bool Schedule::is_EDFSchedulable()
     {
         Process temp_process = local.top();
         local.pop();
-        total_util = (float) temp_process.execution_time/temp_process.period;
+//        total_util = (float) temp_process.execution_time/temp_process.period;
     }
 
     //Check if it is greater than 1
@@ -601,7 +573,7 @@ RMUtil Schedule::is_RMSchedulable()
     {
         Process temp_process = local.top();
         local.pop();
-        total_util = (float) temp_process.execution_time/temp_process.period;
+//        total_util = (float) temp_process.execution_time/temp_process.period;
     }
     n = no_process * (pow(2, 1 / no_process) - 1);
 
@@ -649,4 +621,16 @@ void Schedule::PrintTasks()
         cout<<temp.id<<endl;
     }
 
+}
+
+void Schedule::BranchBound ()
+{
+    //First things would be to calculate the minimum energy row
+    alloc.least_enery_row() //This returns the least energy sum row
+
+
+    //Scan ExecutionTime for each processor
+    // Take the one with the least sum
+
+    //Calculate the least energy
 }

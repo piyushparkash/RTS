@@ -8,5 +8,13 @@ struct RMUtil
     bool feasible;
 };
 
+struct ExecutionTime
+{
+    ProcessorList::iterator processor;
+    int execution_time;
+    int eneryconsumed;
+    int processid;
+};
 
+typedef std::vector<ExecutionTime> ExecutionTimeList;
 #endif // BASICSTRUCT_H_INCLUDED
