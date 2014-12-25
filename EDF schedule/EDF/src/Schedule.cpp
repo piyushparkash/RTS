@@ -304,7 +304,6 @@ void Schedule::loadProcessFromFile(string filename, string exefilename, string e
  int Schedule::lcm(usProcessList processes)
  {
      int temp_gcd=0,temp_lcm=1;
-     Schedule::loadProcessFromFile("Sample.txt");
 
      for(int i=0;i<processes.size();i++)
      {
@@ -648,7 +647,7 @@ void Schedule::PrintTasks()
 void Schedule::BranchBound ()
 {
     //First things would be to calculate the minimum energy row
-    alloc.least_enery_row() //This returns the least energy sum row
+    //alloc.least_enery_row() //This returns the least energy sum row
 
 
     //Scan ExecutionTime for each processor

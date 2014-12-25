@@ -7,6 +7,7 @@
 #include "Process.h"
 #include "ProcessQueue.h"
 #include "BasicStruct.h"
+#include "Allocator.h"
 
 /*
  *      \class  Schedule
@@ -27,6 +28,7 @@ class Schedule
         ProcessList processes;
 
         Allocator alloc;
+        ExecutionTimeList executetimes;
         //Energy Per unit time
         float energyput = 1;
         int noproccessor = 2;
@@ -54,6 +56,7 @@ class Schedule
         ProcessListarrive compare(ProcessList);
         void preempt_process(usProcessList::iterator, usProcessList::iterator, unsigned int);
         void removeTask(usProcessList::iterator, usProcessList&);
+        void BranchBound();
         bool idle;
 
     protected:

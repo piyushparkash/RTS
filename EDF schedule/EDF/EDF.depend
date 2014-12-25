@@ -27,12 +27,13 @@
 	<iostream>
 	"include/Schedule.h"
 
-1418169883 c:\users\theai\rts\edf schedule\edf\include\schedule.h
+1419522701 c:\users\theai\rts\edf schedule\edf\include\schedule.h
 	<vector>
 	<queue>
 	"Process.h"
 	"ProcessQueue.h"
 	"BasicStruct.h"
+	"Allocator.h"
 
 1416617741 c:\users\theai\rts\edf schedule\edf\include\process.h
 	<string>
@@ -101,4 +102,9 @@
 
 1416599638 source:c:\users\theai\rts\edf schedule\edf\src\processor.cpp
 	"Processor.h"
+
+1419166777 c:\users\theai\rts\edf schedule\edf\include\allocator.h
+
+1419166777 source:c:\users\theai\rts\edf schedule\edf\src\allocator.cpp
+	"Allocator.h"
 
