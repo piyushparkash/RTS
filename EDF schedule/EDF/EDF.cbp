@@ -34,12 +34,14 @@
 			<Add option="-Wall" />
 			<Add option="-fexceptions" />
 		</Compiler>
+		<Unit filename="include/Allocator.h" />
 		<Unit filename="include/BasicStruct.h" />
 		<Unit filename="include/Process.h" />
 		<Unit filename="include/ProcessQueue.h" />
 		<Unit filename="include/Processor.h" />
 		<Unit filename="include/Schedule.h" />
 		<Unit filename="main.cpp" />
+		<Unit filename="src/Allocator.cpp" />
 		<Unit filename="src/Process.cpp" />
 		<Unit filename="src/Processor.cpp" />
 		<Unit filename="src/Schedule.cpp" />
@@ -51,9 +53,9 @@
 				<comment_style block="0" line="0" />
 				<doxyfile_project project_number="0.1" output_directory="docs" />
 				<doxyfile_build />
-				<doxyfile_warnings />
+				<doxyfile_warnings warn_if_undocumented="1" />
 				<doxyfile_output />
-				<doxyfile_dot class_diagrams="1" />
+				<doxyfile_dot class_diagrams="1" have_dot="1" />
 				<general />
 			</DoxyBlocks>
 		</Extensions>

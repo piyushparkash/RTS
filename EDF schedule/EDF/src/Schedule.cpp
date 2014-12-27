@@ -22,6 +22,8 @@
 #include <vector>
 #include <algorithm>
 
+#include "Processor.h"
+
 using namespace std;
 
 Schedule::Schedule()
@@ -262,9 +264,9 @@ void Schedule::loadProcessFromFile(string filename, string exefilename, string e
 
 
         Process temp;
-        temp.period = atoi(tokens[1].c_str());
-        temp.absolute_deadline = atoi(tokens[2].c_str());
-        temp.arrival_time = atoi(tokens[3].c_str());
+        temp.period = atoi(tokens[0].c_str());
+        temp.absolute_deadline = atoi(tokens[1].c_str());
+        temp.arrival_time = atoi(tokens[2].c_str());
         temp.id = counter;
 
         //Load the Execution Times
@@ -276,9 +278,10 @@ void Schedule::loadProcessFromFile(string filename, string exefilename, string e
                 //Insert value in the Process;
                 ExecutionTime extemp;
                 extemp.execution_time = atoi(exetokens[j].c_str());
-                extemp.eneryconsumed = atoi(energytokens[j].c_str());
+                extemp.energyconsumed = atoi(energytokens[j].c_str());
                 extemp.processor = processorlist.begin() + i;
                 extemp.processid = counter;
+                extemp.vlevel = processorlist[i].VoltageLevel.begin() + j;
                 Schedule::processes.push(temp);
                 executetimes.push_back(extemp);
             }
@@ -301,23 +304,23 @@ void Schedule::loadProcessFromFile(string filename, string exefilename, string e
  *              If the user given processes are schedulable i.e. if they satisfy the equation u<=n
  *              Then the processes will be scheduled and executed in a arranged sequence.
  */
- int Schedule::lcm(usProcessList processes)
- {
-     int temp_gcd=0,temp_lcm=1;
+int Schedule::lcm(usProcessList processes)
+{
+    int temp_gcd=0,temp_lcm=1;
 
-     for(int i=0;i<processes.size();i++)
-     {
-       temp_gcd=Schedule::GCD(temp_gcd,processes[i].period);
-       //cout<<temp_gcd<<"\n";
-       temp_lcm=temp_lcm*processes[i].period;
-     }
+    for(int i=0; i<processes.size(); i++)
+    {
+        temp_gcd=Schedule::GCD(temp_gcd,processes[i].period);
+        //cout<<temp_gcd<<"\n";
+        temp_lcm=temp_lcm*processes[i].period;
+    }
 
-     return temp_lcm/temp_gcd;
- }
+    return temp_lcm/temp_gcd;
+}
 int Schedule::GCD(int a, int b)
 {
-   if (b==0) return a;
-   return GCD(b,a%b);
+    if (b==0) return a;
+    return GCD(b,a%b);
 }
 
 int Schedule::runRM ()
@@ -475,7 +478,7 @@ void Schedule::RM_preemptive(int total_time,usProcessList arrived,int total)
                 Sleep(1000);
 //                arrived[i].execution_time=arrived[i].execution_time-1;
                 arrived[i].arrival_time=arrived[i].arrival_time+1;
-               // i++;
+                // i++;
                 //i++;
             }
             else
@@ -617,6 +620,64 @@ RMUtil Schedule::is_RMSchedulable()
     return result;
 }
 
+ExecutionTime Schedule::getExecutionTime(int processid, ProcessorList::iterator processor, vector<float>::iterator vlevel)
+{
+    bool found = false;
+    int index;
+
+    //Search for the process in the ExecutionTimelist
+    for (int i = 0; i < executetimes.size(); i++)
+    {
+        if (executetimes[i].processid = processid && processor == executetimes[i].processor
+                                        && vlevel == executetimes[i].vlevel)
+        {
+            found = true;
+            index = i;
+        }
+    }
+
+    if (found)
+    {
+        return executetimes[index];
+    }
+    else
+    {
+        cout<<"We have a serious problem. We could not find the asked process";
+    }
+}
+
+ExecutionTimeList Schedule::getExecutionTime(int processid, ProcessorList::iterator processor)
+{
+    ExecutionTimeList etime;
+
+    //Search for the process in the ExecutionTimelist
+    for (int i = 0; i < executetimes.size(); i++)
+    {
+        if (executetimes[i].processid = processid && processor == executetimes[i].processor)
+        {
+            etime.push_back(executetimes[i]);
+        }
+    }
+
+    return etime;
+}
+
+ExecutionTimeList Schedule::getExecutionTime(int processid)
+{
+    ExecutionTimeList etime;
+
+    //Search for the process in the ExecutionTimeList
+    for (int i = 0; i < executetimes.size(); i++)
+    {
+        if (executetimes[i].processid == processid)
+        {
+            etime.push_back(executetimes[i]);
+        }
+    }
+
+    return etime;
+}
+
 /*
  *      \class  Schedule
  *      \fnctn  Schedule::PrintTasks()
@@ -635,17 +696,36 @@ void Schedule::PrintTasks()
         return;
     }
 
+    Process temp;
+
     while(!local.empty())
     {
-        Process temp = local.top();
+        temp = local.top();
         local.pop();
-        cout<<temp.id<<endl;
+
+        //We have whole lots of information to show of the processes
+        cout<<"=== Task " << temp.id << "===" << endl;
+        cout<<"Arrival Time\t\t\t\t\t: " << temp.arrival_time << endl;
+        cout<<"Absolute Deadline\t\t\t\t\t: " << temp.absolute_deadline << endl;
+        cout<<"Period\t\t\t\t\t: " << temp.period << endl;
+
+        //Now show the execution time, voltage
+        ExecutionTimeList etimes = getExecutionTime(temp.id);
+
+        for(int i = 0; i < etimes.size(); i++)
+        {
+            cout << "Execution Time at Voltage Level " << *etimes[i].vlevel << " of Processor "
+                 << (*etimes[i].processor).id << " is " << etimes[i].execution_time
+                 << " and Energy Consumed is " << etimes[i].energyconsumed << endl;
+        }
     }
 
 }
 
 void Schedule::BranchBound ()
 {
+    loadProcessFromFile("Sample.txt", "exetime.txt", "energy.txt");
+    PrintTasks();
     //First things would be to calculate the minimum energy row
     //alloc.least_enery_row() //This returns the least energy sum row
 

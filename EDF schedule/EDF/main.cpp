@@ -21,18 +21,20 @@ int main()
 {
     Schedule sch;
     int choice;
-    cout<<"choose the algo to proceed \n 1.) EDF scheduling algo \n 2.) RM scheduling algo\n";
+    cout<<"choose the algo to proceed \n 1.) EDF scheduling algo \n 2.) RM scheduling algo\n"
+            << " 3.) Branch And Bound\n";
     cin>>choice;
 
     /*
      * user is asked to type a number(either 1 or 2) to make a choice for EDF or RM scheduling.
      */
 
-    if(choice < 1 || choice > 2)
+    if(choice < 1 || choice > 3)
 
     {
         cout<<"invalid digit !! try again\n";
-        cout<<"choose the algo to proceed \n 1.) EDF scheduling algo \n 2.) RM scheduling algo\n";
+        cout<<"choose the algo to proceed \n 1.) EDF scheduling algo \n 2.) RM scheduling algo\n"
+            << " 3.) Branch And Bound\n";
         cin>>choice;
     }
     /*
@@ -47,5 +49,11 @@ int main()
         break;
     case(2):
         sch.runRM();
+        break;
+    case (3):
+        sch.BranchBound();
+        break;
+    default:
+        cout<<"Please select a correct option";
     }
 }

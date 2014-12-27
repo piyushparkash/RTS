@@ -23,11 +23,11 @@
 	<vector>
 	<queue>
 
-1414887554 source:c:\users\theai\rts\edf schedule\edf\main.cpp
+1419630410 source:c:\users\theai\rts\edf schedule\edf\main.cpp
 	<iostream>
 	"include/Schedule.h"
 
-1419522701 c:\users\theai\rts\edf schedule\edf\include\schedule.h
+1419541428 c:\users\theai\rts\edf schedule\edf\include\schedule.h
 	<vector>
 	<queue>
 	"Process.h"
@@ -45,7 +45,7 @@
 	<iostream>
 	"Process.h"
 
-1416617567 source:c:\users\theai\rts\edf schedule\edf\src\schedule.cpp
+1419632778 source:c:\users\theai\rts\edf schedule\edf\src\schedule.cpp
 	<iostream>
 	<cstdlib>
 	<windows.h>
@@ -56,6 +56,7 @@
 	<sstream>
 	<vector>
 	<algorithm>
+	"Processor.h"
 
 1415124391 source:c:\users\jashn\desktop\rts\edf schedule\edf\main.cpp
 	<iostream>
@@ -91,7 +92,8 @@
 	<vector>
 	<algorithm>
 
-1416616058 c:\users\theai\rts\edf schedule\edf\include\basicstruct.h
+1419722850 c:\users\theai\rts\edf schedule\edf\include\basicstruct.h
+	<vector>
 
 1413562693 c:\users\jashn\desktop\rts\edf schedule\edf\include\basicstruct.h
 

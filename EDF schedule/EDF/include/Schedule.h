@@ -57,6 +57,9 @@ class Schedule
         void preempt_process(usProcessList::iterator, usProcessList::iterator, unsigned int);
         void removeTask(usProcessList::iterator, usProcessList&);
         void BranchBound();
+        ExecutionTime getExecutionTime(int processid, ProcessorList::iterator processor, std::vector<float>::iterator vlevel);
+        ExecutionTimeList getExecutionTime(int processid, ProcessorList::iterator processor);
+        ExecutionTimeList getExecutionTime(int processid);
         bool idle;
 
     protected:

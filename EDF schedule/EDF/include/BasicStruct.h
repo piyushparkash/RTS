@@ -1,6 +1,7 @@
 #ifndef BASICSTRUCT_H_INCLUDED
 #define BASICSTRUCT_H_INCLUDED
 
+#include <vector>
 struct RMUtil
 {
     float n;
@@ -11,8 +12,9 @@ struct RMUtil
 struct ExecutionTime
 {
     ProcessorList::iterator processor;
+    std::vector<float>::iterator vlevel;
     int execution_time;
-    int eneryconsumed;
+    int energyconsumed;
     int processid;
 };
 
