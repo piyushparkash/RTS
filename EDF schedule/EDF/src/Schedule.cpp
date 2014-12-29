@@ -725,9 +725,20 @@ void Schedule::PrintTasks()
 void Schedule::BranchBound ()
 {
     loadProcessFromFile("Sample.txt", "exetime.txt", "energy.txt");
-    PrintTasks();
-    //First things would be to calculate the minimum energy row
-    //alloc.least_enery_row() //This returns the least energy sum row
+
+    //Lets first process the tasks to be executed
+    usProcessList tasklist = copyto_vector(processes);
+
+    //Lets start the loop start finding the processor on which it is to be allocated
+    for (unsigned int i = 0; i < tasklist.size(); i++)
+    {
+        //Role of allocator starts from here, return the least energy row, if processor is available
+        ExecutionTime least_exe_time = alloc.least_enery_row(executetimes, tasklist[i]);
+
+        //map the above process to the processor and save it.
+        alloc.map_process_processor(least_exe_time);
+
+    }
 
 
     //Scan ExecutionTime for each processor

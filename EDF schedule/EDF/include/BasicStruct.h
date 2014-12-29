@@ -18,5 +18,11 @@ struct ExecutionTime
     int processid;
 };
 
+struct ProcessorAllocation
+{
+    Process task;
+    ProcessorList::iterator processor;
+};
+
 typedef std::vector<ExecutionTime> ExecutionTimeList;
 #endif // BASICSTRUCT_H_INCLUDED
