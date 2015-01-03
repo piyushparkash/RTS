@@ -16,7 +16,6 @@
 #include<windows.h>
 #include<math.h>
 #include "Schedule.h"
-#include "BasicStruct.h"
 #include <fstream>
 #include <sstream>
 #include <vector>
@@ -540,7 +539,9 @@ int Schedule::collectProcess()
     //Save the tasks in the class
     Schedule::processes = collected_process;
 
-}
+    return 0;
+
+ }
 
 
 /*
@@ -620,63 +621,7 @@ RMUtil Schedule::is_RMSchedulable()
     return result;
 }
 
-ExecutionTime Schedule::getExecutionTime(int processid, ProcessorList::iterator processor, vector<float>::iterator vlevel)
-{
-    bool found = false;
-    int index;
 
-    //Search for the process in the ExecutionTimelist
-    for (int i = 0; i < executetimes.size(); i++)
-    {
-        if (executetimes[i].processid = processid && processor == executetimes[i].processor
-                                        && vlevel == executetimes[i].vlevel)
-        {
-            found = true;
-            index = i;
-        }
-    }
-
-    if (found)
-    {
-        return executetimes[index];
-    }
-    else
-    {
-        cout<<"We have a serious problem. We could not find the asked process";
-    }
-}
-
-ExecutionTimeList Schedule::getExecutionTime(int processid, ProcessorList::iterator processor)
-{
-    ExecutionTimeList etime;
-
-    //Search for the process in the ExecutionTimelist
-    for (int i = 0; i < executetimes.size(); i++)
-    {
-        if (executetimes[i].processid = processid && processor == executetimes[i].processor)
-        {
-            etime.push_back(executetimes[i]);
-        }
-    }
-
-    return etime;
-}
-
-ExecutionTimeList Schedule::getExecutionTime(int processid)
-{
-    ExecutionTimeList etime;
-
-    //Search for the process in the ExecutionTimeList
-    for (int i = 0; i < executetimes.size(); i++)
-    {
-        if (executetimes[i].processid == processid)
-        {
-            etime.push_back(executetimes[i]);
-        }
-    }
-
-    return etime;
-}
 
 /*
  *      \class  Schedule
@@ -712,7 +657,7 @@ void Schedule::PrintTasks()
         //Now show the execution time, voltage
         ExecutionTimeList etimes = getExecutionTime(temp.id);
 
-        for(int i = 0; i < etimes.size(); i++)
+        for(unsigned int i = 0; i < etimes.size(); i++)
         {
             cout << "Execution Time at Voltage Level " << *etimes[i].vlevel << " of Processor "
                  << (*etimes[i].processor).id << " is " << etimes[i].execution_time
@@ -733,7 +678,7 @@ void Schedule::BranchBound ()
     for (unsigned int i = 0; i < tasklist.size(); i++)
     {
         //Role of allocator starts from here, return the least energy row, if processor is available
-        ExecutionTime least_exe_time = alloc.least_enery_row(executetimes, tasklist[i]);
+        ExecutionTime least_exe_time = alloc.least_energy_row(executetimes, tasklist[i], TaskProcessorMap);
 
         //map the above process to the processor and save it.
         alloc.map_process_processor(least_exe_time);

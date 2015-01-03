@@ -4,10 +4,12 @@
 #include <vector>
 #include <queue>
 
-#include "Process.h"
-#include "ProcessQueue.h"
-#include "BasicStruct.h"
+
+#include "MainBlock.h"
 #include "Allocator.h"
+
+
+
 
 /*
  *      \class  Schedule
@@ -33,6 +35,7 @@ class Schedule
         float energyput = 1;
         int noproccessor = 2;
         ProcessorList processorlist;
+        TaskMap TaskProcessorMap;
 
         void loadProcessFromFile(std::string, std::string, std::string);
         void getProcess();

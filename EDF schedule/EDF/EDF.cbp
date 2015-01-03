@@ -36,12 +36,14 @@
 		</Compiler>
 		<Unit filename="include/Allocator.h" />
 		<Unit filename="include/BasicStruct.h" />
+		<Unit filename="include/MainBlock.h" />
 		<Unit filename="include/Process.h" />
 		<Unit filename="include/ProcessQueue.h" />
 		<Unit filename="include/Processor.h" />
 		<Unit filename="include/Schedule.h" />
 		<Unit filename="main.cpp" />
 		<Unit filename="src/Allocator.cpp" />
+		<Unit filename="src/MainBlock.cpp" />
 		<Unit filename="src/Process.cpp" />
 		<Unit filename="src/Processor.cpp" />
 		<Unit filename="src/Schedule.cpp" />
