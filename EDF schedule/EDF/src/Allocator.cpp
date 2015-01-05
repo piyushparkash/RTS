@@ -49,6 +49,7 @@ ExecutionTime Allocator::least_energy_row(ExecutionTimeList executetimes, Proces
         else
         {
             best_result = executetimes_task[bestone];
+            break;
         }
     }
     return best_result;

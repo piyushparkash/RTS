@@ -281,10 +281,11 @@ void Schedule::loadProcessFromFile(string filename, string exefilename, string e
                 extemp.processor = processorlist.begin() + i;
                 extemp.processid = counter;
                 extemp.vlevel = processorlist[i].VoltageLevel.begin() + j;
-                Schedule::processes.push(temp);
                 executetimes.push_back(extemp);
             }
         }
+        //Add this to the list of the processes
+        Schedule::processes.push(temp);
 
 
         //Reset the vector and the string
@@ -673,6 +674,7 @@ void Schedule::BranchBound ()
 
     //Lets first process the tasks to be executed
     usProcessList tasklist = copyto_vector(processes);
+    cout<< tasklist.size() << endl;
 
     //Lets start the loop start finding the processor on which it is to be allocated
     for (unsigned int i = 0; i < tasklist.size(); i++)
@@ -687,5 +689,7 @@ void Schedule::BranchBound ()
         ProcessorAllocation result_mapped;
         result_mapped.processor = least_exe_time.processor;
         result_mapped.task = result;
+        cout<<"Process "<< result.id << " was allocated to processor " << (*result_mapped.processor).id << endl;
+
     }
 }
