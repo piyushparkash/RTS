@@ -1,5 +1,5 @@
 #include "Allocator.h"
-
+using namespace std;
 Allocator::Allocator()
 {
     //ctor
@@ -11,7 +11,7 @@ Allocator::~Allocator()
 }
 
 
-ExecutionTime Allocator::least_energy_row(ExecutionTimeList executetimes, Process task, TaskMap TaskProcessorMap)
+ExecutionTime Allocator::least_energy_row(ExecutionTimeList executetimes, Process task, TaskMap TaskProcessorMap, bool &overload)
 {
     //Get the Execution Time of the given task Process
     ExecutionTimeList executetimes_task = getExecutionTime(executetimes, task.id);
@@ -24,6 +24,15 @@ ExecutionTime Allocator::least_energy_row(ExecutionTimeList executetimes, Proces
     int bestenergy;
     while(true)
     {
+
+        //When we don't have execution time and energy consumed for the processor
+        if (executetimes_task.size() == 0)
+        {
+            overload = true;
+            break;
+        }
+
+
         for (unsigned int i = 0; i < executetimes_task.size(); i++)
         {
             if (bestone == -1)
@@ -39,7 +48,7 @@ ExecutionTime Allocator::least_energy_row(ExecutionTimeList executetimes, Proces
         }
 
         //Calculate the utilization value of task
-        int task_util = executetimes_task[bestone].execution_time/task.period;
+        float task_util = (float)executetimes_task[bestone].execution_time/task.period;
         int processor_util = calculate_processorutil(TaskProcessorMap, executetimes_task[bestone].processor);
         if ((task_util + processor_util) > 1)
         {

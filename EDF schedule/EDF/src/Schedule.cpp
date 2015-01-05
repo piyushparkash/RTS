@@ -679,8 +679,18 @@ void Schedule::BranchBound ()
     //Lets start the loop start finding the processor on which it is to be allocated
     for (unsigned int i = 0; i < tasklist.size(); i++)
     {
+        bool overload;
+
         //Role of allocator starts from here, return the least energy row, if processor is available
-        ExecutionTime least_exe_time = alloc.least_energy_row(executetimes, tasklist[i], TaskProcessorMap);
+        ExecutionTime least_exe_time = alloc.least_energy_row(executetimes, tasklist[i], TaskProcessorMap, overload);
+
+        //This is when there is not enough processors for the tasks available
+        if (overload)
+        {
+            cout<< "There are not enough processors for task set\n";
+            overload = false;
+            continue;
+        }
 
         //map the above process to the processor and save it.
         Process result = alloc.prepare_process(least_exe_time, tasklist[i]);
