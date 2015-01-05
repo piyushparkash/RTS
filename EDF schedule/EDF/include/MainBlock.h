@@ -19,10 +19,6 @@ class Processor
 
         std::vector<float> VoltageLevel;
 
-        //Add a function to calculate the utilization of processor
-        float calculateUtil(TaskMap);
-        TaskMap filter_by_processor(TaskMap, int);
-
         bool operator==(Processor);
     protected:
     private:
@@ -115,64 +111,9 @@ struct ExecutionTime
     int processid;
 };
 typedef std::vector<ExecutionTime> ExecutionTimeList;
-
-ExecutionTime getExecutionTime(ExecutionTimeList executetimes, int processid, ProcessorList::iterator processor, std::vector<float>::iterator vlevel)
-{
-    bool found = false;
-    int index;
-
-    //Search for the process in the ExecutionTimelist
-    for (int i = 0; i < executetimes.size(); i++)
-    {
-        if (executetimes[i].processid = processid && processor == executetimes[i].processor
-                                        && vlevel == executetimes[i].vlevel)
-        {
-            found = true;
-            index = i;
-        }
-    }
-
-    if (found)
-    {
-        return executetimes[index];
-    }
-    else
-    {
-        std::cout<<"We have a serious problem. We could not find the asked process";
-    }
-}
-
-ExecutionTimeList getExecutionTime(ExecutionTimeList executetimes, int processid, ProcessorList::iterator processor)
-{
-    ExecutionTimeList etime;
-
-    //Search for the process in the ExecutionTimelist
-    for (int i = 0; i < executetimes.size(); i++)
-    {
-        if (executetimes[i].processid = processid && processor == executetimes[i].processor)
-        {
-            etime.push_back(executetimes[i]);
-        }
-    }
-
-    return etime;
-}
-
-ExecutionTimeList getExecutionTime(ExecutionTimeList executetimes, int processid)
-{
-    ExecutionTimeList etime;
-
-    //Search for the process in the ExecutionTimeList
-    for (int i = 0; i < executetimes.size(); i++)
-    {
-        if (executetimes[i].processid == processid)
-        {
-            etime.push_back(executetimes[i]);
-        }
-    }
-
-    return etime;
-}
+ExecutionTime getExecutionTime(ExecutionTimeList, int processid, ProcessorList::iterator processor, std::vector<float>::iterator vlevel);
+ExecutionTimeList getExecutionTime(ExecutionTimeList, int processid, ProcessorList::iterator processor);
+ExecutionTimeList getExecutionTime(ExecutionTimeList, int processid);
 
 struct ProcessorAllocation
 {
@@ -180,4 +121,7 @@ struct ProcessorAllocation
     ProcessorList::iterator processor;
 };
 
+TaskMap filter_by_processor(TaskMap, int);
+
+float calculate_processorutil(TaskMap, ProcessorList::iterator);
 #endif // MAINBLOCK_H

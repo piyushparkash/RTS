@@ -27,7 +27,7 @@
 	<iostream>
 	"include/Schedule.h"
 
-1420303496 c:\users\theai\rts\edf schedule\edf\include\schedule.h
+1420461886 c:\users\theai\rts\edf schedule\edf\include\schedule.h
 	<vector>
 	<queue>
 	"MainBlock.h"
@@ -41,18 +41,17 @@
 	<iostream>
 	"Process.h"
 
-1419632778 source:c:\users\theai\rts\edf schedule\edf\src\schedule.cpp
+1420461543 source:c:\users\theai\rts\edf schedule\edf\src\schedule.cpp
 	<iostream>
 	<cstdlib>
 	<windows.h>
 	<math.h>
 	"Schedule.h"
-	"BasicStruct.h"
 	<fstream>
 	<sstream>
 	<vector>
 	<algorithm>
-	"Processor.h"
+	"MainBlock.h"
 
 1415124391 source:c:\users\jashn\desktop\rts\edf schedule\edf\main.cpp
 	<iostream>
@@ -98,18 +97,18 @@
 1420283770 source:c:\users\theai\rts\edf schedule\edf\src\processor.cpp
 	"Processor.h"
 
-1420315457 c:\users\theai\rts\edf schedule\edf\include\allocator.h
+1420460808 c:\users\theai\rts\edf schedule\edf\include\allocator.h
 	"MainBlock.h"
 
-1420315443 source:c:\users\theai\rts\edf schedule\edf\src\allocator.cpp
+1420460814 source:c:\users\theai\rts\edf schedule\edf\src\allocator.cpp
 	"Allocator.h"
 
-1420315613 c:\users\theai\rts\edf schedule\edf\include\mainblock.h
+1420462080 c:\users\theai\rts\edf schedule\edf\include\mainblock.h
 	<iostream>
 	<vector>
 	<queue>
 	<string>
 
-1420315720 source:c:\users\theai\rts\edf schedule\edf\src\mainblock.cpp
+1420462084 source:c:\users\theai\rts\edf schedule\edf\src\mainblock.cpp
 	"MainBlock.h"
 

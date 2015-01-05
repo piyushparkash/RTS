@@ -18,36 +18,6 @@ bool Processor::operator==(Processor tocompare)
     }
 }
 
-TaskMap Processor::filter_by_processor(TaskMap mappedvar, int id)
-{
-    //We have to filter out results for the processor
-    TaskMap result_map;
-    for (unsigned int i = 0; i < mappedvar.size(); i++)
-    {
-        if (id == (*mappedvar[i].processor).id)
-        {
-            result_map.push_back(mappedvar[i]);
-        }
-    }
-
-    return result_map;
-}
-
-float Processor::calculateUtil(TaskMap mappedvar)
-{
-    //Get all the task which are allocated to this processor
-    TaskMap onthischip = filter_by_processor(mappedvar, this->id);
-
-    //Calculate utilization of all tasks
-    float total_util = 0.0;
-    for (unsigned int i = 0; i < onthischip.size(); i++)
-    {
-        total_util += (float)onthischip[i].task.execution_time / onthischip[i].task.period;
-    }
-
-    return total_util;
-}
-
 Process::Process()
 {
     executed = 0;
@@ -127,4 +97,93 @@ bool Process::operator == (Process tocompare)
     {
         return false;
     }
+}
+
+ExecutionTime getExecutionTime(ExecutionTimeList executetimes, int processid,
+                               ProcessorList::iterator processor, std::vector<float>::iterator vlevel)
+{
+    bool found = false;
+    int index;
+
+    //Search for the process in the ExecutionTimelist
+    for (int i = 0; i < executetimes.size(); i++)
+    {
+        if (executetimes[i].processid = processid && processor == executetimes[i].processor
+                                        && vlevel == executetimes[i].vlevel)
+        {
+            found = true;
+            index = i;
+        }
+    }
+
+    if (found)
+    {
+        return executetimes[index];
+    }
+    else
+    {
+        std::cout<<"We have a serious problem. We could not find the asked process";
+    }
+}
+
+ExecutionTimeList getExecutionTime(ExecutionTimeList executetimes, int processid, ProcessorList::iterator processor)
+{
+    ExecutionTimeList etime;
+
+    //Search for the process in the ExecutionTimelist
+    for (int i = 0; i < executetimes.size(); i++)
+    {
+        if (executetimes[i].processid = processid && processor == executetimes[i].processor)
+        {
+            etime.push_back(executetimes[i]);
+        }
+    }
+
+    return etime;
+}
+
+ExecutionTimeList getExecutionTime(ExecutionTimeList executetimes, int processid)
+{
+    ExecutionTimeList etime;
+
+    //Search for the process in the ExecutionTimeList
+    for (int i = 0; i < executetimes.size(); i++)
+    {
+        if (executetimes[i].processid == processid)
+        {
+            etime.push_back(executetimes[i]);
+        }
+    }
+
+    return etime;
+}
+
+TaskMap filter_by_processor(TaskMap mappedvar, int id)
+{
+    //We have to filter out results for the processor
+    TaskMap result_map;
+    for (unsigned int i = 0; i < mappedvar.size(); i++)
+    {
+        if (id == (*mappedvar[i].processor).id)
+        {
+            result_map.push_back(mappedvar[i]);
+        }
+    }
+
+    return result_map;
+}
+
+float calculate_processorutil(TaskMap mappedvar, ProcessorList::iterator processor)
+{
+    //Get all the task which are allocated to this processor
+    TaskMap onthischip = filter_by_processor(mappedvar, processor->id);
+
+    //Calculate utilization of all tasks
+    float total_util = 0.0;
+    for (unsigned int i = 0; i < onthischip.size(); i++)
+    {
+        total_util += (float)onthischip[i].task.execution_time / onthischip[i].task.period;
+    }
+
+    return total_util;
 }

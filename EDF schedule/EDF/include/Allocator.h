@@ -13,6 +13,7 @@ class Allocator
         virtual ~Allocator();
 
         ExecutionTime least_energy_row(ExecutionTimeList, Process, TaskMap);
+        Process prepare_process(ExecutionTime, Process);
     protected:
     private:
 };

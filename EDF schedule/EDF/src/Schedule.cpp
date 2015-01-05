@@ -20,8 +20,8 @@
 #include <sstream>
 #include <vector>
 #include <algorithm>
+#include "MainBlock.h"
 
-#include "Processor.h"
 
 using namespace std;
 
@@ -655,7 +655,7 @@ void Schedule::PrintTasks()
         cout<<"Period\t\t\t\t\t: " << temp.period << endl;
 
         //Now show the execution time, voltage
-        ExecutionTimeList etimes = getExecutionTime(temp.id);
+        ExecutionTimeList etimes = getExecutionTime(executetimes, temp.id);
 
         for(unsigned int i = 0; i < etimes.size(); i++)
         {
@@ -681,13 +681,11 @@ void Schedule::BranchBound ()
         ExecutionTime least_exe_time = alloc.least_energy_row(executetimes, tasklist[i], TaskProcessorMap);
 
         //map the above process to the processor and save it.
-        alloc.map_process_processor(least_exe_time);
+        Process result = alloc.prepare_process(least_exe_time, tasklist[i]);
 
+        //Map the process with the processor
+        ProcessorAllocation result_mapped;
+        result_mapped.processor = least_exe_time.processor;
+        result_mapped.task = result;
     }
-
-
-    //Scan ExecutionTime for each processor
-    // Take the one with the least sum
-
-    //Calculate the least energy
 }

@@ -13,8 +13,10 @@ Allocator::~Allocator()
 
 ExecutionTime Allocator::least_energy_row(ExecutionTimeList executetimes, Process task, TaskMap TaskProcessorMap)
 {
-    //First thing would be to filter our according to the process
+    //Get the Execution Time of the given task Process
     ExecutionTimeList executetimes_task = getExecutionTime(executetimes, task.id);
+
+    //The picked execution time which is best suited
     ExecutionTime best_result;
 
     //We have the execution times, choose the best one with least energy
@@ -38,8 +40,8 @@ ExecutionTime Allocator::least_energy_row(ExecutionTimeList executetimes, Proces
 
         //Calculate the utilization value of task
         int task_util = executetimes_task[bestone].execution_time/task.period;
-        int processor_util = (*executetimes_task[bestone].processor).calculateUtil(TaskProcessorMap);
-        if (task_util + processor_util > 1)
+        int processor_util = calculate_processorutil(TaskProcessorMap, executetimes_task[bestone].processor);
+        if ((task_util + processor_util) > 1)
         {
             executetimes_task.erase(executetimes_task.begin()+bestone);
             bestone = -1;
@@ -51,4 +53,15 @@ ExecutionTime Allocator::least_energy_row(ExecutionTimeList executetimes, Proces
     }
     return best_result;
 
+}
+
+Process Allocator::prepare_process(ExecutionTime process_ex, Process final_process)
+{
+    Process result = final_process;
+
+    //Assign the energy and the execution time
+    result.energyconsumed = process_ex.energyconsumed;
+    result.execution_time = process_ex.execution_time;
+
+    return result;
 }
