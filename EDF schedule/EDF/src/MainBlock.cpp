@@ -185,5 +185,6 @@ float calculate_processorutil(TaskMap mappedvar, ProcessorList::iterator process
         total_util += (float)onthischip[i].task.execution_time / onthischip[i].task.period;
     }
 
+    cout<<"Utilization for processor " << processor->id << " was calculated to be " << total_util << endl;
     return total_util;
 }

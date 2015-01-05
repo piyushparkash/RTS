@@ -691,5 +691,8 @@ void Schedule::BranchBound ()
         result_mapped.task = result;
         cout<<"Process "<< result.id << " was allocated to processor " << (*result_mapped.processor).id << endl;
 
+        //And oh, don't forget to push it to the main variable
+        TaskProcessorMap.push_back(result_mapped);
+
     }
 }
