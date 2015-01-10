@@ -674,7 +674,6 @@ void Schedule::BranchBound ()
 
     //Lets first process the tasks to be executed
     usProcessList tasklist = copyto_vector(processes);
-    cout<< tasklist.size() << endl;
 
     //Lets start the loop start finding the processor on which it is to be allocated
     for (unsigned int i = 0; i < tasklist.size(); i++)
@@ -682,7 +681,7 @@ void Schedule::BranchBound ()
         bool overload;
 
         //Role of allocator starts from here, return the least energy row, if processor is available
-        ExecutionTime least_exe_time = alloc.least_energy_row(executetimes, tasklist[i], TaskProcessorMap, overload);
+        ExecutionTime least_exe_time = alloc.least_energy_row(executetimes, tasklist[i], TaskProcessorMap, overload, false, executetimes[0].processor);
 
         //This is when there is not enough processors for the tasks available
         if (overload)
@@ -699,10 +698,37 @@ void Schedule::BranchBound ()
         ProcessorAllocation result_mapped;
         result_mapped.processor = least_exe_time.processor;
         result_mapped.task = result;
+
         cout<<"Process "<< result.id << " was allocated to processor " << (*result_mapped.processor).id << endl;
 
         //And oh, don't forget to push it to the main variable
         TaskProcessorMap.push_back(result_mapped);
+
+        //Now repeat the similar procedure for the backup
+        ExecutionTime least_exe_time_backup = alloc.least_energy_row(executetimes, tasklist[i], TaskProcessorMap, overload, true, result_mapped.processor);
+
+        if (overload)
+        {
+            //We don't have any space for the back
+            cout << "We don't have any processor for backup of task " << tasklist[i].id << endl;
+            overload = false;
+            continue;
+        }
+
+        result = alloc.prepare_process(least_exe_time_backup, tasklist[i]);
+
+        //Let them know that this is a backup task
+        result.is_backup = true;
+
+        //Lets use the same variable as above
+        result_mapped.processor = least_exe_time_backup.processor;
+        result_mapped.task = result;
+
+        cout<<"Process "<< result.id << " 's backup was allocated to processor " << (*result_mapped.processor).id << endl;
+
+        //And oh, don't forget to push it to the main variable
+        TaskProcessorMap.push_back(result_mapped);
+
 
     }
 }

@@ -12,7 +12,7 @@ class Allocator
         /** Default destructor */
         virtual ~Allocator();
 
-        ExecutionTime least_energy_row(ExecutionTimeList, Process, TaskMap, bool&);
+        ExecutionTime least_energy_row(ExecutionTimeList, Process, TaskMap, bool&, bool, ProcessorList::iterator);
         Process prepare_process(ExecutionTime, Process);
     protected:
     private:

@@ -21,6 +21,8 @@ bool Processor::operator==(Processor tocompare)
 Process::Process()
 {
     executed = 0;
+    //Initialization of needed variables
+    is_backup = false;
 }
 
 /**

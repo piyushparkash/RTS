@@ -44,6 +44,7 @@ public:
     int relative_deadline;
     int absolute_deadline;
     int id;
+    bool is_backup;
     Process();
     void set_period(int);
     void user_period();

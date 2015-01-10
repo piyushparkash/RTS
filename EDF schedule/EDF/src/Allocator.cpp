@@ -11,7 +11,7 @@ Allocator::~Allocator()
 }
 
 
-ExecutionTime Allocator::least_energy_row(ExecutionTimeList executetimes, Process task, TaskMap TaskProcessorMap, bool &overload)
+ExecutionTime Allocator::least_energy_row(ExecutionTimeList executetimes, Process task, TaskMap TaskProcessorMap, bool &overload, bool is_backup = false, ProcessorList::iterator maintask_processor = NULL)
 {
     //Get the Execution Time of the given task Process
     ExecutionTimeList executetimes_task = getExecutionTime(executetimes, task.id);
@@ -53,6 +53,12 @@ ExecutionTime Allocator::least_energy_row(ExecutionTimeList executetimes, Proces
         if ((task_util + processor_util) > 1)
         {
             executetimes_task.erase(executetimes_task.begin()+bestone);
+            bestone = -1;
+        }
+        // If allocating for a backup then you cannot allocate the processor on which the primary task is
+        else if (is_backup && executetimes_task[bestone].processor == maintask_processor)
+        {
+            executetimes_task.erase(executetimes_task.begin() + bestone);
             bestone = -1;
         }
         else
