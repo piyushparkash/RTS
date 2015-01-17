@@ -1,7 +1,7 @@
 /*
  *       \file       Schedule.cpp
  *
- *       \brief      Class definition for LDF Scheduling and RM Scheduling
+ *       \brief      Class definition for EDF Scheduling and RM Scheduling
  *
  *       \compiler   g++\n
  *
@@ -25,6 +25,9 @@
 
 using namespace std;
 
+/** \brief Constructor for initialize the no of processors in the system
+ *         and give each one an ID
+ */
 Schedule::Schedule()
 {
     processorlist.resize(noproccessor);
